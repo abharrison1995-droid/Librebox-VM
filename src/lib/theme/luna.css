@@ -1,0 +1,161 @@
+/*
+ * Windows XP Luna Blue theme tokens
+ * Sourced from the actual XP Luna msstyles color values.
+ */
+
+:root {
+  /* Title bar */
+  --luna-title-start: #0058E6;
+  --luna-title-end: #3B90FF;
+  --luna-title-inactive-start: #7A96DF;
+  --luna-title-inactive-end: #A8C4FF;
+  --luna-title-text: #FFFFFF;
+
+  /* Taskbar */
+  --luna-taskbar-start: #1B4BC8;
+  --luna-taskbar-end: #3C7AFF;
+  --luna-start-bg: #3C9E44;
+  --luna-start-hover: #4AB654;
+  --luna-start-text: #FFFFFF;
+
+  /* Window */
+  --luna-window-bg: #ECE9D8;
+  --luna-window-border: #0055EA;
+  --luna-panel-bg: #F1EFE2;
+  --luna-panel-border: #D6D2C2;
+  --luna-info-bg: #F7F5EE;
+
+  /* Controls */
+  --luna-button-face: #ECE9D8;
+  --luna-button-highlight: #FFFFFF;
+  --luna-button-shadow: #ACA899;
+  --luna-button-dark-shadow: #716F64;
+  --luna-button-text: #000000;
+  --luna-input-bg: #FFFFFF;
+  --luna-input-border: #7F9DB9;
+
+  /* Selection & focus */
+  --luna-selection: #316AC5;
+  --luna-selection-text: #FFFFFF;
+  --luna-focus-ring: #6D9BF1;
+
+  /* Scrollbar */
+  --luna-scrollbar-track: #F1EFE2;
+  --luna-scrollbar-thumb: #CDCBBB;
+  --luna-scrollbar-thumb-hover: #ACA899;
+
+  /* Text */
+  --luna-text: #000000;
+  --luna-text-secondary: #4A4A4A;
+  --luna-text-disabled: #ACA899;
+  --luna-link: #0066CC;
+
+  /* Shadows */
+  --luna-shadow-sm: 1px 1px 2px rgba(0, 0, 0, 0.15);
+  --luna-shadow-md: 2px 2px 6px rgba(0, 0, 0, 0.2);
+  --luna-shadow-window: 2px 2px 8px rgba(0, 0, 0, 0.3);
+
+  /* Spacing & radius */
+  --luna-radius: 3px;
+  --luna-radius-lg: 8px;
+  --luna-title-height: 30px;
+  --luna-taskbar-height: 40px;
+
+  /* Typography */
+  --luna-font: "Segoe UI", "Tahoma", "Microsoft Sans Serif", system-ui, sans-serif;
+  --luna-font-title: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  --luna-font-mono: "Cascadia Code", "Consolas", "Lucida Console", monospace;
+}
+
+/* Base reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--luna-font);
+  font-size: 13px;
+  color: var(--luna-text);
+  background: var(--luna-window-bg);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* XP-style scrollbar */
+::-webkit-scrollbar {
+  width: 17px;
+  height: 17px;
+}
+::-webkit-scrollbar-track {
+  background: var(--luna-scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--luna-scrollbar-thumb);
+  border: 1px solid var(--luna-button-shadow);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--luna-scrollbar-thumb-hover);
+}
+::-webkit-scrollbar-corner {
+  background: var(--luna-scrollbar-track);
+}
+
+/* XP-style button */
+.xp-button {
+  font-family: var(--luna-font);
+  font-size: 12px;
+  padding: 3px 16px;
+  background: var(--luna-button-face);
+  color: var(--luna-button-text);
+  border: 1px solid;
+  border-color: var(--luna-button-highlight) var(--luna-button-dark-shadow)
+                var(--luna-button-dark-shadow) var(--luna-button-highlight);
+  border-radius: var(--luna-radius);
+  cursor: pointer;
+  outline: none;
+}
+.xp-button:hover {
+  background: #F0EDE1;
+}
+.xp-button:active {
+  border-color: var(--luna-button-dark-shadow) var(--luna-button-highlight)
+                var(--luna-button-highlight) var(--luna-button-dark-shadow);
+  padding: 4px 15px 2px 17px;
+}
+.xp-button:focus-visible {
+  outline: 1px dotted var(--luna-text);
+  outline-offset: -4px;
+}
+
+/* XP-style text input */
+.xp-input {
+  font-family: var(--luna-font);
+  font-size: 12px;
+  padding: 3px 4px;
+  background: var(--luna-input-bg);
+  color: var(--luna-text);
+  border: 1px solid var(--luna-input-border);
+  border-radius: 0;
+  outline: none;
+}
+.xp-input:focus {
+  border-color: var(--luna-selection);
+}
+
+/* XP panel (sunken frame) */
+.xp-panel {
+  background: var(--luna-panel-bg);
+  border: 1px solid var(--luna-panel-border);
+}
+
+.xp-panel-sunken {
+  background: var(--luna-input-bg);
+  border: 2px solid;
+  border-color: var(--luna-button-shadow) var(--luna-button-highlight)
+                var(--luna-button-highlight) var(--luna-button-shadow);
+}
