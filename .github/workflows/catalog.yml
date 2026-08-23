@@ -1,0 +1,67 @@
+name: Catalog
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  # Upstream projects retag releases and delete old assets, so a URL that works
+  # today can rot without anyone touching this repo. Catch it weekly.
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  lint:
+    name: Validate catalog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Structure
+        run: node catalog/lint.mjs
+
+      # Hits ~40 external hosts, so a single flaky mirror should not block a PR.
+      # The scheduled and push runs do fail, which is where rot needs noticing.
+      - name: Download URLs
+        run: node catalog/lint.mjs --check-urls
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
+
+      - name: Site builds
+        run: node catalog/build-site.mjs
+
+  deploy:
+    name: Publish to Pages
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+    needs: lint
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build site
+        run: node catalog/build-site.mjs
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

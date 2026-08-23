@@ -1,34 +1,18 @@
 <script lang="ts">
+  import CoverTile from "./CoverTile.svelte";
+  import { platformLabel } from "$lib/format";
+
   interface Props {
     title: string;
     year?: number | null;
     platform: string;
-    publisher?: string | null;
     coverPath?: string | null;
     selected?: boolean;
     ondblclick?: () => void;
     onclick?: () => void;
   }
 
-  let { title, year, platform, publisher, coverPath, selected = false, ondblclick, onclick }: Props = $props();
-
-  function platformLabel(p: string): string {
-    switch (p) {
-      case "dos": return "DOS";
-      case "win9x": return "Win 9x";
-      case "winxp": return "Win XP";
-      default: return p.toUpperCase();
-    }
-  }
-
-  function generateColor(str: string): string {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const h = Math.abs(hash) % 360;
-    return `hsl(${h}, 35%, 45%)`;
-  }
+  let { title, year, platform, coverPath, selected = false, ondblclick, onclick }: Props = $props();
 </script>
 
 <button
@@ -38,17 +22,13 @@
   {onclick}
   type="button"
 >
-  <div class="cover" style="background-color: {coverPath ? 'transparent' : generateColor(title)}">
-    {#if coverPath}
-      <img src={coverPath} alt="{title} cover art" />
-    {:else}
-      <span class="cover-letter">{title.charAt(0).toUpperCase()}</span>
-    {/if}
+  <div class="cover-slot">
+    <CoverTile {title} src={coverPath} />
   </div>
   <div class="meta">
     <span class="title">{title}</span>
     <span class="info">
-      <span class="platform-badge">{platformLabel(platform)}</span>
+      <span class="platform-badge">{platformLabel(platform, true)}</span>
       {#if year}
         <span class="year">{year}</span>
       {/if}
@@ -88,28 +68,8 @@
     outline-color: var(--luna-selection-text);
   }
 
-  .cover {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 2px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+  .cover-slot {
     margin-bottom: 6px;
-  }
-  .cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .cover-letter {
-    font-family: var(--luna-font-title);
-    font-size: 40px;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.8);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
   .meta {

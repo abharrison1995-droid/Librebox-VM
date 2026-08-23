@@ -1,0 +1,1137 @@
+{
+  "schema_version": 1,
+  "updated": "2026-08-23",
+  "games": [
+    {
+      "id": "beneath-a-steel-sky",
+      "title": "Beneath a Steel Sky",
+      "year": 1994,
+      "developer": "Revolution Software",
+      "publisher": "Virgin Interactive",
+      "platform": "dos",
+      "runtime": "scummvm",
+      "genres": [
+        "adventure",
+        "point-and-click"
+      ],
+      "license": "freeware",
+      "license_note": "Released as freeware by Revolution Software and distributed by the ScummVM project.",
+      "source_url": "https://www.scummvm.org/games/#games-sky",
+      "description": "Dystopian cyberpunk point-and-click with Dave Gibbons artwork.",
+      "cover_url": null,
+      "download": {
+        "url": "https://downloads.scummvm.org/frs/extras/Beneath%20a%20Steel%20Sky/bass-cd-1.2.zip",
+        "format": "zip",
+        "size_bytes": 69377781,
+        "sha256": null
+      },
+      "runtime_config": {
+        "game_id": "sky"
+      }
+    },
+    {
+      "id": "bio-menace",
+      "title": "Bio Menace",
+      "year": 1993,
+      "developer": "Apogee Software",
+      "publisher": "Apogee Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "platformer",
+        "action"
+      ],
+      "license": "freeware",
+      "license_note": "Released as freeware by 3D Realms in 2005.",
+      "source_url": "https://archive.org/details/msdos_Bio_Menace_1993",
+      "description": "Snake Logan cleans mutants out of Metro City with a lot of firepower.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_Bio_Menace_1993/Bio_Menace_1993.zip",
+        "format": "zip",
+        "size_bytes": 1650382,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "BMENACE1.EXE",
+        "cpu_cycles": "8000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "blake-stone-shareware",
+      "title": "Blake Stone: Aliens of Gold (Shareware)",
+      "year": 1993,
+      "developer": "JAM Productions",
+      "publisher": "Apogee Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "fps",
+        "action"
+      ],
+      "license": "shareware",
+      "license_note": "Shareware episode distributed by Apogee Software.",
+      "source_url": "https://archive.org/details/msdos_Blake_Stone_-_Aliens_of_Gold_1993",
+      "description": "A Wolf3D-engine shooter with informants, elevators and keycards.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/Bs-aog-sw1/bstone.zip",
+        "format": "zip",
+        "size_bytes": 1378690,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "BSTONE.EXE",
+        "cpu_cycles": "12000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "cave-story",
+      "title": "Cave Story",
+      "year": 2004,
+      "developer": "Studio Pixel",
+      "publisher": "Studio Pixel",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "platformer",
+        "metroidvania"
+      ],
+      "license": "freeware",
+      "license_note": "Released as freeware by Daisuke 'Pixel' Amaya.",
+      "source_url": "https://www.cavestory.org/",
+      "description": "The freeware metroidvania that launched a thousand indie careers.",
+      "cover_url": null,
+      "download": {
+        "url": "https://www.cavestory.org/downloads/cavestoryen.zip",
+        "format": "zip",
+        "size_bytes": 1136575,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "Doukutsu.exe"
+      }
+    },
+    {
+      "id": "commander-keen-1",
+      "title": "Commander Keen: Marooned on Mars",
+      "year": 1990,
+      "developer": "id Software",
+      "publisher": "Apogee Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "platformer"
+      ],
+      "license": "shareware",
+      "license_note": "Episode 1 of the Invasion of the Vorticons trilogy, distributed as shareware by Apogee.",
+      "source_url": "https://archive.org/details/msdos_Commander_Keen_1_-_Marooned_on_Mars_1990",
+      "description": "An eight-year-old genius defends Mars in EGA-coloured side-scrolling glory.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_Commander_Keen_1_-_Marooned_on_Mars_1990/Commander_Keen_1_-_Marooned_on_Mars_1990.zip",
+        "format": "zip",
+        "size_bytes": 212637,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "KEEN1.EXE",
+        "cpu_cycles": "3000",
+        "sound": "pcspeaker",
+        "aspect": true
+      }
+    },
+    {
+      "id": "crystal-caves",
+      "title": "Crystal Caves (Shareware)",
+      "year": 1991,
+      "developer": "Apogee Software",
+      "publisher": "Apogee Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "platformer"
+      ],
+      "license": "shareware",
+      "license_note": "Shareware episode distributed by Apogee Software.",
+      "source_url": "https://archive.org/details/msdos_Crystal_Caves_1991",
+      "description": "Mine crystals across hazard-filled caverns as Mylo Steamwitz.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_Crystal_Caves_1991/Crystal_Caves_1991.zip",
+        "format": "zip",
+        "size_bytes": 538510,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "CC1.EXE",
+        "cpu_cycles": "4000",
+        "sound": "pcspeaker",
+        "aspect": true
+      }
+    },
+    {
+      "id": "ddnet",
+      "title": "DDNet",
+      "year": 2013,
+      "developer": "The DDNet Team",
+      "publisher": "The DDNet Team",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "platformer",
+        "multiplayer"
+      ],
+      "license": "open-source",
+      "license_note": "Free and open-source cooperative platformer built on the Teeworlds engine.",
+      "source_url": "https://ddnet.org/",
+      "description": "Co-operative 2D platforming with tight physics and thousands of community maps.",
+      "cover_url": null,
+      "download": {
+        "url": "https://ddnet.org/downloads/DDNet-19.2-win64.zip",
+        "format": "zip",
+        "size_bytes": 61582715,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "DDNet.exe"
+      }
+    },
+    {
+      "id": "descent-shareware",
+      "title": "Descent (Shareware)",
+      "year": 1995,
+      "developer": "Parallax Software",
+      "publisher": "Interplay",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "fps",
+        "action"
+      ],
+      "license": "shareware",
+      "license_note": "Shareware episode distributed by Interplay.",
+      "source_url": "https://archive.org/details/msdos_Descent_1995",
+      "description": "Six degrees of freedom in claustrophobic mining tunnels.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_Descent_1995/Descent_1995.zip",
+        "format": "zip",
+        "size_bytes": 2982850,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "DESCENT.EXE",
+        "cpu_cycles": "max",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "devilutionx",
+      "title": "DevilutionX",
+      "year": 2019,
+      "developer": "DevilutionX contributors",
+      "publisher": "DevilutionX contributors",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "arpg"
+      ],
+      "license": "open-source",
+      "license_note": "Sublicense-free GPL-3.0 engine. Requires original Diablo game data, or the freely available shareware DIABDAT.",
+      "source_url": "https://github.com/diasurgical/devilutionX",
+      "description": "A modern, cross-platform source port of the Diablo engine.",
+      "cover_url": null,
+      "download": {
+        "url": "https://github.com/diasurgical/DevilutionX/releases/download/1.5.5/devilutionx-windows-x86_64.zip",
+        "format": "zip",
+        "size_bytes": 10482049,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "devilutionx.exe"
+      }
+    },
+    {
+      "id": "doom-shareware",
+      "title": "DOOM (Shareware)",
+      "year": 1993,
+      "developer": "id Software",
+      "publisher": "id Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "fps",
+        "action"
+      ],
+      "license": "shareware",
+      "license_note": "Episode 1, 'Knee-Deep in the Dead', is freely redistributable shareware released by id Software.",
+      "source_url": "https://archive.org/details/DoomsharewareEpisode",
+      "description": "The shareware episode of the game that defined the first-person shooter.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/DoomsharewareEpisode/DoomV1.9sw1995idSoftwareInc.action.zip",
+        "format": "zip",
+        "size_bytes": 2451850,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "DOOM.EXE",
+        "cpu_cycles": "20000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "drascula",
+      "title": "Drascula: The Vampire Strikes Back",
+      "year": 1996,
+      "developer": "Alcachofa Soft",
+      "publisher": "Alcachofa Soft",
+      "platform": "dos",
+      "runtime": "scummvm",
+      "genres": [
+        "adventure",
+        "point-and-click"
+      ],
+      "license": "freeware",
+      "license_note": "Released as freeware by Alcachofa Soft and distributed by the ScummVM project.",
+      "source_url": "https://www.scummvm.org/games/#games-drascula",
+      "description": "A gleefully silly Spanish horror-comedy adventure.",
+      "cover_url": null,
+      "download": {
+        "url": "https://downloads.scummvm.org/frs/extras/Drascula_%20The%20Vampire%20Strikes%20Back/drascula-1.0.zip",
+        "format": "zip",
+        "size_bytes": 32842993,
+        "sha256": null
+      },
+      "runtime_config": {
+        "game_id": "drascula"
+      }
+    },
+    {
+      "id": "duke-nukem-2",
+      "title": "Duke Nukem II",
+      "year": 1993,
+      "developer": "Apogee Software",
+      "publisher": "Apogee Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "platformer",
+        "action"
+      ],
+      "license": "shareware",
+      "license_note": "Shareware episode distributed by Apogee Software.",
+      "source_url": "https://archive.org/details/msdos_Duke_Nukem_II_1993",
+      "description": "Bigger, louder sequel with parallax scrolling and a full Adlib score.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/duke-nukem2-sw/duke2.zip",
+        "format": "zip",
+        "size_bytes": 1099114,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "NUKEM2.EXE",
+        "cpu_cycles": "8000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "endless-sky",
+      "title": "Endless Sky",
+      "year": 2015,
+      "developer": "Michael Zahniser",
+      "publisher": "Endless Sky contributors",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "space",
+        "trading",
+        "rpg"
+      ],
+      "license": "open-source",
+      "license_note": "GPL-3.0 open-source space trading and combat game.",
+      "source_url": "https://endless-sky.github.io/",
+      "description": "Trade, fight and explore a vast galaxy in this Escape Velocity successor.",
+      "cover_url": null,
+      "download": {
+        "url": "https://github.com/endless-sky/endless-sky/releases/download/v0.11.2/EndlessSky-win64-v0.11.2.zip",
+        "format": "zip",
+        "size_bytes": 369748978,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "EndlessSky.exe"
+      }
+    },
+    {
+      "id": "epic-pinball-shareware",
+      "title": "Epic Pinball (Shareware)",
+      "year": 1993,
+      "developer": "Digital Extremes",
+      "publisher": "Epic MegaGames",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "pinball"
+      ],
+      "license": "shareware",
+      "license_note": "Shareware table distributed by Epic MegaGames.",
+      "source_url": "https://archive.org/details/msdos_Epic_Pinball_1993",
+      "description": "Smooth-scrolling pinball with one of the great tracker soundtracks.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_Epic_Pinball_1993/Epic_Pinball_1993.zip",
+        "format": "zip",
+        "size_bytes": 7737949,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "PINBALL.EXE",
+        "cpu_cycles": "12000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "flight-of-the-amazon-queen",
+      "title": "Flight of the Amazon Queen",
+      "year": 1995,
+      "developer": "Interactive Binary Illusions",
+      "publisher": "Renegade Software",
+      "platform": "dos",
+      "runtime": "scummvm",
+      "genres": [
+        "adventure",
+        "point-and-click"
+      ],
+      "license": "freeware",
+      "license_note": "Released as freeware by the authors and distributed by the ScummVM project.",
+      "source_url": "https://www.scummvm.org/games/#games-queen",
+      "description": "Pulp jungle adventure with a wisecracking pilot and lost Amazon tribes.",
+      "cover_url": null,
+      "download": {
+        "url": "https://downloads.scummvm.org/frs/extras/Flight%20of%20the%20Amazon%20Queen/FOTAQ_Talkie-1.1.zip",
+        "format": "zip",
+        "size_bytes": 33744817,
+        "sha256": null
+      },
+      "runtime_config": {
+        "game_id": "queen"
+      }
+    },
+    {
+      "id": "freedoom",
+      "title": "Freedoom: Phase 1 & 2",
+      "year": 2024,
+      "developer": "The Freedoom Project",
+      "publisher": "The Freedoom Project",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "fps",
+        "action"
+      ],
+      "license": "open-source",
+      "license_note": "BSD-licensed free content IWADs compatible with the Doom engine.",
+      "source_url": "https://freedoom.github.io/",
+      "description": "A complete, freely licensed replacement for the original Doom game data.",
+      "cover_url": null,
+      "download": {
+        "url": "https://github.com/freedoom/freedoom/releases/download/v0.13.0/freedoom-0.13.0.zip",
+        "format": "zip",
+        "size_bytes": 24143781,
+        "sha256": null
+      },
+      "runtime_config": {}
+    },
+    {
+      "id": "heretic-shareware",
+      "title": "Heretic (Shareware)",
+      "year": 1994,
+      "developer": "Raven Software",
+      "publisher": "id Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "fps",
+        "action"
+      ],
+      "license": "shareware",
+      "license_note": "Shareware episode distributed by id Software.",
+      "source_url": "https://archive.org/details/msdos_Heretic_1994",
+      "description": "Dark fantasy on the Doom engine, with inventory and look-up-and-down.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_Heretic_1994/Heretic_1994.zip",
+        "format": "zip",
+        "size_bytes": 11324941,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "HERETIC.EXE",
+        "cpu_cycles": "20000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "hocus-pocus",
+      "title": "Hocus Pocus (Shareware)",
+      "year": 1994,
+      "developer": "Moonlite Software",
+      "publisher": "Apogee Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "platformer"
+      ],
+      "license": "shareware",
+      "license_note": "Shareware episode distributed by Apogee Software.",
+      "source_url": "https://archive.org/details/msdos_Hocus_Pocus_1994",
+      "description": "A wizard's apprentice blasts through colourful side-scrolling levels.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_Hocus_Pocus_1994/Hocus_Pocus_1994.zip",
+        "format": "zip",
+        "size_bytes": 2718854,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "HOCUS.EXE",
+        "cpu_cycles": "8000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "jazz-jackrabbit-shareware",
+      "title": "Jazz Jackrabbit (Shareware)",
+      "year": 1994,
+      "developer": "Epic MegaGames",
+      "publisher": "Epic MegaGames",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "platformer"
+      ],
+      "license": "shareware",
+      "license_note": "Shareware episode distributed by Epic MegaGames.",
+      "source_url": "https://archive.org/details/msdos_Jazz_Jackrabbit_1994",
+      "description": "A blisteringly fast mascot platformer, the PC's answer to Sonic.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_Jazz_Jackrabbit_1994/Jazz_Jackrabbit_1994.zip",
+        "format": "zip",
+        "size_bytes": 5716811,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "JAZZ.EXE",
+        "cpu_cycles": "12000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "keen-dreams",
+      "title": "Keen Dreams",
+      "year": 1991,
+      "developer": "id Software",
+      "publisher": "Softdisk",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "platformer"
+      ],
+      "license": "open-source",
+      "license_note": "Source code released under GPL-2.0; the game data was made freely available by the rights holders.",
+      "source_url": "https://archive.org/details/msdos_Keen_Dreams_1991",
+      "description": "The oddball Commander Keen entry where Billy fights vegetables.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/CommanderKeenKeenDreams/CommanderKeenInKeenDreamsV1.13Egasw1992softdiskPublishingaction.ZIP",
+        "format": "zip",
+        "size_bytes": 359707,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "KDREAMS.EXE",
+        "cpu_cycles": "3000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "lure-of-the-temptress",
+      "title": "Lure of the Temptress",
+      "year": 1992,
+      "developer": "Revolution Software",
+      "publisher": "Virgin Games",
+      "platform": "dos",
+      "runtime": "scummvm",
+      "genres": [
+        "adventure",
+        "point-and-click"
+      ],
+      "license": "freeware",
+      "license_note": "Released as freeware by Revolution Software and distributed by the ScummVM project.",
+      "source_url": "https://www.scummvm.org/games/#games-lure",
+      "description": "Revolution's first adventure, with an early NPC 'virtual theatre' system.",
+      "cover_url": null,
+      "download": {
+        "url": "https://downloads.scummvm.org/frs/extras/Lure%20of%20the%20Temptress/lure-1.1.zip",
+        "format": "zip",
+        "size_bytes": 5678861,
+        "sha256": null
+      },
+      "runtime_config": {
+        "game_id": "lure"
+      }
+    },
+    {
+      "id": "major-stryker",
+      "title": "Major Stryker",
+      "year": 1993,
+      "developer": "Apogee Software",
+      "publisher": "Apogee Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "shmup",
+        "action"
+      ],
+      "license": "freeware",
+      "license_note": "Released as freeware by 3D Realms.",
+      "source_url": "https://archive.org/details/msdos_Major_Stryker_1993",
+      "description": "A vertically scrolling shooter with smooth EGA parallax starfields.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_Major_Stryker_1993/Major_Stryker_1993.zip",
+        "format": "zip",
+        "size_bytes": 2571359,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "STRYKER.EXE",
+        "cpu_cycles": "8000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "monster-bash",
+      "title": "Monster Bash (Shareware)",
+      "year": 1993,
+      "developer": "Apogee Software",
+      "publisher": "Apogee Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "platformer"
+      ],
+      "license": "shareware",
+      "license_note": "Shareware episode distributed by Apogee Software.",
+      "source_url": "https://archive.org/details/monster-bash1-sw",
+      "description": "Johnny Dash rescues kidnapped pets from a cast of horror-movie monsters.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/monster-bash1-sw/bash.zip",
+        "format": "zip",
+        "size_bytes": 990586,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "BASH.EXE",
+        "cpu_cycles": "8000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "one-must-fall-2097",
+      "title": "One Must Fall 2097",
+      "year": 1994,
+      "developer": "Diversions Entertainment",
+      "publisher": "Epic MegaGames",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "fighting"
+      ],
+      "license": "freeware",
+      "license_note": "Released as freeware by Epic Games in 1999.",
+      "source_url": "https://archive.org/details/msdos_One_Must_Fall_2097_1994",
+      "description": "Mech-piloting fighting game with a deep pilot progression system.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_One_Must_Fall_2097_1994/One_Must_Fall_2097_1994.zip",
+        "format": "zip",
+        "size_bytes": 13923269,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "FILE0001.EXE",
+        "cpu_cycles": "20000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "openra",
+      "title": "OpenRA",
+      "year": 2010,
+      "developer": "The OpenRA Project",
+      "publisher": "The OpenRA Project",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "strategy",
+        "rts"
+      ],
+      "license": "open-source",
+      "license_note": "GPL-3.0 engine. Freely downloads the publisher-released freeware Command & Conquer and Red Alert data on first run.",
+      "source_url": "https://www.openra.net/",
+      "description": "Modernised Command & Conquer and Red Alert with contemporary RTS controls.",
+      "cover_url": null,
+      "download": {
+        "url": "https://github.com/OpenRA/OpenRA/releases/download/release-20250330/OpenRA-release-20250330-x64-winportable.zip",
+        "format": "zip",
+        "size_bytes": 73079233,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "RedAlert.exe"
+      }
+    },
+    {
+      "id": "openttd",
+      "title": "OpenTTD",
+      "year": 2004,
+      "developer": "The OpenTTD Team",
+      "publisher": "The OpenTTD Team",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "simulation",
+        "strategy"
+      ],
+      "license": "open-source",
+      "license_note": "GPL-2.0 open-source remake of Transport Tycoon Deluxe.",
+      "source_url": "https://www.openttd.org/",
+      "description": "Build and run a transport empire; the definitive Transport Tycoon successor.",
+      "cover_url": null,
+      "download": {
+        "url": "https://cdn.openttd.org/openttd-releases/14.1/openttd-14.1-windows-win64.zip",
+        "format": "zip",
+        "size_bytes": 10162663,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "openttd.exe"
+      }
+    },
+    {
+      "id": "raptor-call-of-the-shadows",
+      "title": "Raptor: Call of the Shadows (Shareware)",
+      "year": 1994,
+      "developer": "Cygnus Studios",
+      "publisher": "Apogee Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "shmup",
+        "action"
+      ],
+      "license": "shareware",
+      "license_note": "Shareware episode distributed by Apogee Software.",
+      "source_url": "https://archive.org/details/msdos_Raptor_Call_of_the_Shadows_1994",
+      "description": "A mercenary pilot upgrades an increasingly absurd arsenal between sorties.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/Raptor-sw1/raptor.zip",
+        "format": "zip",
+        "size_bytes": 1890661,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "RAPTOR.EXE",
+        "cpu_cycles": "12000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "rise-of-the-triad-shareware",
+      "title": "Rise of the Triad (Shareware)",
+      "year": 1995,
+      "developer": "Apogee Software",
+      "publisher": "Apogee Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "fps",
+        "action"
+      ],
+      "license": "shareware",
+      "license_note": "The Hunt Begins shareware episode, distributed by Apogee Software.",
+      "source_url": "https://archive.org/details/msdos_Rise_of_the_Triad_-_The_HUNT_Begins_1995",
+      "description": "Absurdly over-the-top shooter with jump pads, missiles and dog mode.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_Rise_of_the_Triad_-_The_Hunt_Begins_Deluxe_Edition_1995/Rise_of_the_Triad_-_The_Hunt_Begins_Deluxe_Edition_1995.zip",
+        "format": "zip",
+        "size_bytes": 20685288,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "ROTT.EXE",
+        "cpu_cycles": "20000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "secret-agent",
+      "title": "Secret Agent (Shareware)",
+      "year": 1992,
+      "developer": "Apogee Software",
+      "publisher": "Apogee Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "platformer",
+        "action"
+      ],
+      "license": "shareware",
+      "license_note": "Shareware episode distributed by Apogee Software.",
+      "source_url": "https://archive.org/details/msdos_Secret_Agent_1992",
+      "description": "Agent 006 1/2 infiltrates enemy bases in this Keen-engine spy caper.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_Secret_Agent_1992/Secret_Agent_1992.zip",
+        "format": "zip",
+        "size_bytes": 585819,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "SA1.EXE",
+        "cpu_cycles": "4000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "soltys",
+      "title": "Soltys",
+      "year": 1999,
+      "developer": "Laboratorium Komputerowe Avalon",
+      "publisher": "Laboratorium Komputerowe Avalon",
+      "platform": "dos",
+      "runtime": "scummvm",
+      "genres": [
+        "adventure",
+        "point-and-click"
+      ],
+      "license": "freeware",
+      "license_note": "Released as freeware by Laboratorium Komputerowe Avalon and distributed by the ScummVM project.",
+      "source_url": "https://www.scummvm.org/games/#games-soltys",
+      "description": "A Polish cult adventure about a caretaker caught up in the supernatural.",
+      "cover_url": null,
+      "download": {
+        "url": "https://downloads.scummvm.org/frs/extras/Soltys/soltys-en-v1.0.zip",
+        "format": "zip",
+        "size_bytes": 3484518,
+        "sha256": null
+      },
+      "runtime_config": {
+        "game_id": "soltys"
+      }
+    },
+    {
+      "id": "supertux",
+      "title": "SuperTux",
+      "year": 2003,
+      "developer": "The SuperTux Team",
+      "publisher": "The SuperTux Team",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "platformer"
+      ],
+      "license": "open-source",
+      "license_note": "GPL-3.0 open-source platformer.",
+      "source_url": "https://www.supertux.org/",
+      "description": "A classic side-scrolling platformer starring the Linux penguin.",
+      "cover_url": null,
+      "download": {
+        "url": "https://github.com/SuperTux/supertux/releases/download/v0.7.0/SuperTux-v0.7.0-win64-portable.zip",
+        "format": "zip",
+        "size_bytes": 308538500,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "supertux2.exe"
+      }
+    },
+    {
+      "id": "supertuxkart",
+      "title": "SuperTuxKart",
+      "year": 2004,
+      "developer": "The SuperTuxKart Team",
+      "publisher": "The SuperTuxKart Team",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "racing"
+      ],
+      "license": "open-source",
+      "license_note": "GPL-3.0 open-source kart racer.",
+      "source_url": "https://supertuxkart.net/",
+      "description": "A polished free kart racer with weapons, drifting and split-screen.",
+      "cover_url": null,
+      "download": {
+        "url": "https://github.com/supertuxkart/stk-code/releases/download/1.5/SuperTuxKart-1.5-win.zip",
+        "format": "zip",
+        "size_bytes": 922430727,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "supertuxkart.exe"
+      }
+    },
+    {
+      "id": "terminal-velocity-shareware",
+      "title": "Terminal Velocity (Shareware)",
+      "year": 1995,
+      "developer": "Terminal Reality",
+      "publisher": "3D Realms",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "action",
+        "flight"
+      ],
+      "license": "shareware",
+      "license_note": "Shareware episode distributed by 3D Realms.",
+      "source_url": "https://archive.org/details/msdos_Terminal_Velocity_1995",
+      "description": "Blisteringly fast texture-mapped flight combat across alien worlds.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_Terminal_Velocity_1995/Terminal_Velocity_1995.zip",
+        "format": "zip",
+        "size_bytes": 135391472,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "TV.EXE",
+        "cpu_cycles": "max",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "the-battle-for-wesnoth",
+      "title": "The Battle for Wesnoth",
+      "year": 2003,
+      "developer": "The Battle for Wesnoth Project",
+      "publisher": "The Battle for Wesnoth Project",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "strategy",
+        "turn-based"
+      ],
+      "license": "open-source",
+      "license_note": "GPL-2.0 open-source turn-based strategy game.",
+      "source_url": "https://www.wesnoth.org/",
+      "description": "Deep hex-based fantasy strategy with a vast library of campaigns.",
+      "cover_url": null,
+      "download": {
+        "url": "https://sourceforge.net/projects/wesnoth/files/wesnoth-1.18/wesnoth-1.18.2/wesnoth-1.18.2-win64.exe/download",
+        "format": "exe",
+        "size_bytes": 434223085,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "wesnoth.exe"
+      }
+    },
+    {
+      "id": "the-ur-quan-masters",
+      "title": "The Ur-Quan Masters",
+      "year": 2002,
+      "developer": "Toys for Bob",
+      "publisher": "The Ur-Quan Masters Project",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "adventure",
+        "space"
+      ],
+      "license": "open-source",
+      "license_note": "Star Control II source and content released by Toys for Bob in 2002; engine is GPL-2.0, content CC-BY-NC-SA.",
+      "source_url": "https://sourceforge.net/projects/sc2/",
+      "description": "The legendary Star Control II, freely released and lovingly maintained.",
+      "cover_url": null,
+      "download": {
+        "url": "https://downloads.sourceforge.net/project/sc2/UQM/0.8/uqm-0.8-win32.exe",
+        "format": "exe",
+        "size_bytes": 2274513,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "uqm.exe"
+      }
+    },
+    {
+      "id": "tyrian-2000",
+      "title": "Tyrian 2000",
+      "year": 1999,
+      "developer": "Eclipse Software",
+      "publisher": "XSIV Games",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "shmup",
+        "action"
+      ],
+      "license": "freeware",
+      "license_note": "Released as freeware by the copyright holders in 2004.",
+      "source_url": "https://archive.org/details/msdos_Tyrian_2000_1999",
+      "description": "A gorgeous vertical shooter with a sprawling ship upgrade economy.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/msdos_Tyrian_2000_1999/Tyrian_2000_1999.zip",
+        "format": "zip",
+        "size_bytes": 5772456,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "TYRIAN2K.EXE",
+        "cpu_cycles": "20000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "warzone-2100",
+      "title": "Warzone 2100",
+      "year": 1999,
+      "developer": "Pumpkin Studios",
+      "publisher": "The Warzone 2100 Project",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "strategy",
+        "rts"
+      ],
+      "license": "open-source",
+      "license_note": "Original source and data released by Eidos in 2004; now maintained under GPL-2.0.",
+      "source_url": "https://wz2100.net/",
+      "description": "Post-apocalyptic RTS with a genuinely deep unit design system.",
+      "cover_url": null,
+      "download": {
+        "url": "https://github.com/Warzone2100/warzone2100/releases/download/4.7.0/warzone2100_win_x64_archive.zip",
+        "format": "zip",
+        "size_bytes": 392936210,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "warzone2100.exe"
+      }
+    },
+    {
+      "id": "widelands",
+      "title": "Widelands",
+      "year": 2001,
+      "developer": "The Widelands Development Team",
+      "publisher": "The Widelands Development Team",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "strategy",
+        "rts"
+      ],
+      "license": "open-source",
+      "license_note": "GPL-2.0 open-source real-time strategy game inspired by Settlers II.",
+      "source_url": "https://www.widelands.org/",
+      "description": "Economy-focused RTS about supply chains, not unit micromanagement.",
+      "cover_url": null,
+      "download": {
+        "url": "https://github.com/widelands/widelands/releases/download/v1.3.1/Widelands-1.3.1-x64.exe",
+        "format": "exe",
+        "size_bytes": 458701881,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "widelands.exe"
+      }
+    },
+    {
+      "id": "wolfenstein-3d-shareware",
+      "title": "Wolfenstein 3D (Shareware)",
+      "year": 1992,
+      "developer": "id Software",
+      "publisher": "Apogee Software",
+      "platform": "dos",
+      "runtime": "dosbox",
+      "genres": [
+        "fps",
+        "action"
+      ],
+      "license": "shareware",
+      "license_note": "Episode 1 was released as freely redistributable shareware by Apogee and id Software.",
+      "source_url": "https://archive.org/details/Wolfenstein3d",
+      "description": "The grandfather of the first-person shooter, escaping Castle Wolfenstein.",
+      "cover_url": null,
+      "download": {
+        "url": "https://archive.org/download/Wolfenstein3d/Wolfenstein3dV14sw.ZIP",
+        "format": "zip",
+        "size_bytes": 669022,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "WOLF3D.EXE",
+        "cpu_cycles": "8000",
+        "sound": "sb16",
+        "aspect": true
+      }
+    },
+    {
+      "id": "xonotic",
+      "title": "Xonotic",
+      "year": 2011,
+      "developer": "Team Xonotic",
+      "publisher": "Team Xonotic",
+      "platform": "native",
+      "runtime": "native",
+      "genres": [
+        "fps",
+        "action"
+      ],
+      "license": "open-source",
+      "license_note": "GPL-2.0 open-source arena shooter.",
+      "source_url": "https://xonotic.org/",
+      "description": "Fast, movement-heavy arena FPS in the Quake tradition.",
+      "cover_url": null,
+      "download": {
+        "url": "https://dl.xonotic.org/xonotic-0.8.6.zip",
+        "format": "zip",
+        "size_bytes": 1238439495,
+        "sha256": null
+      },
+      "runtime_config": {
+        "executable": "xonotic.exe"
+      }
+    }
+  ]
+}

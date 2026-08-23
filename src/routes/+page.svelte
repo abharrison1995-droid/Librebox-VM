@@ -1,20 +1,9 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
   import GameCard from "$lib/components/GameCard.svelte";
-
-  interface Game {
-    id: string;
-    title: string;
-    year: number | null;
-    publisher: string | null;
-    platform: string;
-    engine: string | null;
-    source: string;
-    install_path: string | null;
-    cover_path: string | null;
-    last_played: string | null;
-    playtime_s: number;
-  }
+  import CoverTile from "$lib/components/CoverTile.svelte";
+  import { platformLabel, formatPlaytime, sourceLabel } from "$lib/format";
+  import type { Game } from "$lib/types";
 
   let games = $state<Game[]>([]);
   let selectedId = $state<string | null>(null);
@@ -36,23 +25,6 @@
   });
 
   let selectedGame = $derived(games.find((g) => g.id === selectedId) ?? null);
-
-  function platformLabel(p: string): string {
-    switch (p) {
-      case "dos": return "DOS";
-      case "win9x": return "Windows 9x";
-      case "winxp": return "Windows XP";
-      default: return p;
-    }
-  }
-
-  function formatPlaytime(seconds: number): string {
-    if (seconds < 60) return "Never played";
-    const hours = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    if (hours > 0) return `${hours}h ${mins}m`;
-    return `${mins}m`;
-  }
 </script>
 
 <div class="library-page">
@@ -109,7 +81,9 @@
             </svg>
           </div>
           <p class="empty-title">Your library is empty</p>
-          <p class="empty-hint">Add games using the toolbar above, or browse the free catalog to get started.</p>
+          <p class="empty-hint">
+            Browse the <a href="/catalog">free catalog</a> to get started.
+          </p>
         </div>
       {:else if viewMode === "grid"}
         <div class="game-grid">
@@ -118,7 +92,6 @@
               title={game.title}
               year={game.year}
               platform={game.platform}
-              publisher={game.publisher}
               coverPath={game.cover_path}
               selected={selectedId === game.id}
               onclick={() => selectedId = game.id}
@@ -153,12 +126,8 @@
     <!-- Detail panel -->
     {#if selectedGame}
       <aside class="detail-panel">
-        <div class="detail-cover" style="background-color: {selectedGame.cover_path ? 'transparent' : `hsl(${Math.abs([...selectedGame.title].reduce((h, c) => c.charCodeAt(0) + ((h << 5) - h), 0)) % 360}, 35%, 45%)`}">
-          {#if selectedGame.cover_path}
-            <img src={selectedGame.cover_path} alt="{selectedGame.title} cover" />
-          {:else}
-            <span class="detail-letter">{selectedGame.title.charAt(0).toUpperCase()}</span>
-          {/if}
+        <div class="detail-cover">
+          <CoverTile title={selectedGame.title} src={selectedGame.cover_path} letterSize={56} />
         </div>
         <h2 class="detail-title">{selectedGame.title}</h2>
         <div class="detail-meta">
@@ -184,7 +153,7 @@
           </div>
           <div class="meta-row">
             <span class="meta-label">Source</span>
-            <span class="meta-value">{selectedGame.source === 'catalog' ? 'Catalog' : 'Your Copy'}</span>
+            <span class="meta-value">{sourceLabel(selectedGame.source)}</span>
           </div>
         </div>
         <button class="launch-btn xp-button">
@@ -363,25 +332,6 @@
   }
   .detail-cover {
     width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 3px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-  }
-  .detail-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .detail-letter {
-    font-family: var(--luna-font-title);
-    font-size: 64px;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.8);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
   .detail-title {
     font-family: var(--luna-font-title);
