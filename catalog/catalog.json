@@ -1,6 +1,36 @@
 {
   "schema_version": 1,
   "updated": "2026-08-23",
+  "runtimes": {
+    "dosbox": {
+      "id": "dosbox",
+      "name": "DOSBox Staging",
+      "version": "0.82.2",
+      "executable": "dosbox.exe",
+      "source_url": "https://www.dosbox-staging.org/",
+      "license_note": "GPL-2.0-or-later. Distributed unmodified from the project's own releases.",
+      "download": {
+        "url": "https://github.com/dosbox-staging/dosbox-staging/releases/download/v0.82.2/dosbox-staging-windows-x64-v0.82.2.zip",
+        "format": "zip",
+        "size_bytes": null,
+        "sha256": "9fa55dcbacc2e5565ac4be63b5cfa4e7d50dc9adb9f9cb53f506d973af567f3a"
+      }
+    },
+    "scummvm": {
+      "id": "scummvm",
+      "name": "ScummVM",
+      "version": "2.9.1",
+      "executable": "scummvm.exe",
+      "source_url": "https://www.scummvm.org/",
+      "license_note": "GPL-3.0-or-later. Distributed unmodified from the project's own releases.",
+      "download": {
+        "url": "https://downloads.scummvm.org/frs/scummvm/2.9.1/scummvm-2.9.1-win32-x86_64.zip",
+        "format": "zip",
+        "size_bytes": null,
+        "sha256": "f1e54c995a8032674cca16f4aa2d9b3513b42bac63fe7cdbdf336efebda3fcc4"
+      }
+    }
+  },
   "games": [
     {
       "id": "beneath-a-steel-sky",

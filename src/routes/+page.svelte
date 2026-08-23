@@ -4,6 +4,7 @@
   import CoverTile from "$lib/components/CoverTile.svelte";
   import { platformLabel, formatPlaytime, sourceLabel } from "$lib/format";
   import { downloads } from "$lib/downloads.svelte";
+  import { launcher } from "$lib/launcher.svelte";
   import type { Game } from "$lib/types";
 
   let games = $state<Game[]>([]);
@@ -22,10 +23,11 @@
     }
   }
 
-  // Reading the installed set makes this re-run when an install completes, so
-  // a game downloaded on the Catalog tab shows up here without a manual refresh.
+  // Re-runs when an install completes (so a game downloaded on the Catalog tab
+  // appears here) and when a game exits (so its new playtime shows).
   $effect(() => {
     downloads.installed;
+    launcher.running;
     loadGames();
   });
 
@@ -175,16 +177,48 @@
             <span class="meta-value">{sourceLabel(selectedGame.source)}</span>
           </div>
         </div>
-        <button class="launch-btn xp-button" disabled title="Launching is not implemented yet">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M2 1L10 6L2 11V1Z" fill="var(--luna-start-bg)"/>
-          </svg>
-          Launch Game
-        </button>
+        {#if !selectedGame.install_path}
+          <button class="launch-btn xp-button" disabled title="This game has no files on disk">
+            Not installed
+          </button>
+        {:else if launcher.isRunning(selectedGame.id)}
+          <button class="launch-btn xp-button" disabled>Running…</button>
+          <p class="launch-hint">Close the game window to return.</p>
+        {:else}
+          <button
+            class="launch-btn xp-button"
+            disabled={launcher.isStarting(selectedGame.id)}
+            onclick={() => launcher.launch(selectedGame!.id)}
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 1L10 6L2 11V1Z" fill="var(--luna-start-bg)"/>
+            </svg>
+            {launcher.isStarting(selectedGame.id) ? "Starting…" : "Launch Game"}
+          </button>
+          {#if launcher.runtimeFetch && launcher.isStarting(selectedGame.id)}
+            <p class="launch-hint">
+              Getting {launcher.runtimeFetch.name}
+              {#if launcher.runtimeFetch.total}
+                — {Math.round((launcher.runtimeFetch.downloaded / launcher.runtimeFetch.total) * 100)}%
+              {/if}
+              <br />First time only.
+            </p>
+          {/if}
+        {/if}
+
+        {#if launcher.errors[selectedGame.id]}
+          <p class="launch-error" role="alert">
+            {launcher.errors[selectedGame.id]}
+            <button class="dismiss" onclick={() => launcher.dismissError(selectedGame!.id)}>
+              Dismiss
+            </button>
+          </p>
+        {/if}
+
         {#if selectedGame.install_path}
           <button
             class="xp-button uninstall-btn"
-            disabled={busy}
+            disabled={busy || launcher.isRunning(selectedGame.id)}
             onclick={() => uninstall(selectedGame!)}
           >
             {busy ? "Removing…" : "Uninstall"}
@@ -403,5 +437,34 @@
     padding: 4px 16px;
     font-size: 11px;
     margin-top: 6px;
+  }
+  .launch-hint {
+    font-size: 10px;
+    line-height: 1.4;
+    color: var(--luna-text-disabled);
+    text-align: center;
+    margin: 4px 0 0;
+  }
+  .launch-error {
+    font-size: 10px;
+    line-height: 1.4;
+    color: #7a1c1c;
+    background: #fbe6e6;
+    border: 1px solid #d48a8a;
+    border-radius: 3px;
+    padding: 5px 6px;
+    margin: 6px 0 0;
+  }
+  .dismiss {
+    display: block;
+    margin-top: 4px;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: var(--luna-font);
+    font-size: 10px;
+    color: #7a1c1c;
+    text-decoration: underline;
+    cursor: pointer;
   }
 </style>

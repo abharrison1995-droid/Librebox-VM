@@ -1,6 +1,7 @@
 mod catalog;
 mod db;
 mod download;
+mod launch;
 
 use catalog::{CatalogFilter, CatalogGame, SyncResult, CATALOG_URL};
 use db::{Database, Game};
@@ -36,6 +37,8 @@ struct InstallProgress {
 struct AppState {
     db: Database,
     installs: Mutex<HashMap<String, InstallJob>>,
+    /// Games currently running, keyed by game id.
+    running: Mutex<HashMap<String, RunningGame>>,
 }
 
 // ------------------------------------------------------------------- library
@@ -429,6 +432,159 @@ async fn run_install(
     Ok(game)
 }
 
+// ------------------------------------------------------------------ playing
+
+#[derive(Clone, serde::Serialize)]
+struct RunningGame {
+    game_id: String,
+    title: String,
+}
+
+#[tauri::command]
+fn running_games(state: tauri::State<AppState>) -> Vec<RunningGame> {
+    state
+        .running
+        .lock()
+        .map(|r| r.values().cloned().collect())
+        .unwrap_or_default()
+}
+
+/// Starts an installed game, fetching its runtime first if we do not have it.
+///
+/// Returns once the game has been spawned; the process is then watched by a
+/// background task that records playtime when it exits.
+#[tauri::command]
+async fn launch_game(
+    app: AppHandle,
+    state: tauri::State<'_, AppState>,
+    id: String,
+) -> Result<(), String> {
+    let game = state
+        .db
+        .get_game(&id)
+        .map_err(|e| e.to_string())?
+        .ok_or("no such game")?;
+
+    if state.running.lock().map(|r| r.contains_key(&id)).unwrap_or(false) {
+        return Err("that game is already running".into());
+    }
+
+    let install_dir = game
+        .install_path
+        .as_deref()
+        .map(PathBuf::from)
+        .ok_or("that game is not installed")?;
+    if !install_dir.exists() {
+        return Err("the install directory is missing — try reinstalling".into());
+    }
+
+    let runtime = game.runtime.as_deref().unwrap_or("native");
+    let config: serde_json::Value = game
+        .runtime_config
+        .as_deref()
+        .and_then(|c| serde_json::from_str(c).ok())
+        .unwrap_or(serde_json::Value::Object(Default::default()));
+
+    let root = app.path().app_data_dir().map_err(|e| e.to_string())?;
+
+    // Fetch the emulator if this is the first game that needs it. Reuses the
+    // install pipeline, so it is verified against the catalog's hash too.
+    let runtime_exe = match runtime {
+        "dosbox" | "scummvm" => {
+            let spec = state
+                .db
+                .get_runtime(runtime)
+                .map_err(|e| e.to_string())?
+                .ok_or_else(|| format!("the catalog has no '{runtime}' runtime"))?;
+
+            if launch::installed_runtime(&root, &spec).is_none() {
+                let _ = app.emit(
+                    "runtime:progress",
+                    serde_json::json!({ "runtime": runtime, "name": spec.name, "downloaded": 0, "total": spec.download.size_bytes }),
+                );
+            }
+            let never = AtomicBool::new(false);
+            let emitter = app.clone();
+            let rt = runtime.to_string();
+            let name = spec.name.clone();
+            let exe = launch::ensure_runtime(&root, &spec, &never, move |done, total| {
+                let _ = emitter.emit(
+                    "runtime:progress",
+                    serde_json::json!({ "runtime": rt, "name": name, "downloaded": done, "total": total }),
+                );
+            })
+            .await
+            .map_err(|e| format!("could not set up {}: {e}", spec.name))?;
+            let _ = app.emit("runtime:ready", serde_json::json!({ "runtime": runtime }));
+            Some(exe)
+        }
+        _ => None,
+    };
+
+    let conf_path = root.join("conf").join(format!("{id}.conf"));
+    let plan = launch::plan_launch(
+        runtime,
+        runtime_exe.as_deref(),
+        &install_dir,
+        &config,
+        &conf_path,
+    )?;
+
+    let mut child = tokio::process::Command::new(&plan.program)
+        .args(&plan.args)
+        .current_dir(&plan.cwd)
+        .spawn()
+        .map_err(|e| format!("could not start {}: {e}", plan.program.display()))?;
+
+    if let Ok(mut running) = state.running.lock() {
+        running.insert(
+            id.clone(),
+            RunningGame {
+                game_id: id.clone(),
+                title: game.title.clone(),
+            },
+        );
+    }
+    let _ = app.emit(
+        "game:launched",
+        serde_json::json!({ "game_id": id, "title": game.title }),
+    );
+
+    // Watch for exit off the command's thread so the UI is not blocked for the
+    // whole play session.
+    let handle = app.clone();
+    let watched = id.clone();
+    let started = std::time::Instant::now();
+    tauri::async_runtime::spawn(async move {
+        let status = child.wait().await;
+        let seconds = started.elapsed().as_secs() as i64;
+
+        if let Some(state) = handle.try_state::<AppState>() {
+            if let Ok(mut running) = state.running.lock() {
+                running.remove(&watched);
+            }
+            // Ignore sessions too short to be a real play — a crash on startup
+            // should not accumulate playtime.
+            if seconds >= 5 {
+                if let Err(e) = state.db.record_play(&watched, seconds) {
+                    eprintln!("launch: could not record playtime: {e}");
+                }
+            }
+        }
+
+        let _ = handle.emit(
+            "game:exited",
+            serde_json::json!({
+                "game_id": watched,
+                "seconds": seconds,
+                "ok": status.map(|s| s.success()).unwrap_or(false),
+            }),
+        );
+    });
+
+    Ok(())
+}
+
 /// Removes an installed game's files and its library row.
 #[tauri::command]
 fn uninstall_game(
@@ -639,6 +795,7 @@ pub fn run() {
             app.manage(AppState {
                 db: database,
                 installs: Mutex::new(HashMap::new()),
+                running: Mutex::new(HashMap::new()),
             });
 
             sweep_scratch(app.handle());
@@ -651,6 +808,7 @@ pub fn run() {
                     if let Err(e) = state.db.replace_catalog(&bundled.games, "bundled") {
                         eprintln!("catalog: could not seed bundled copy: {e}");
                     }
+                    let _ = state.db.set_runtimes(&bundled.runtimes);
                 }
             }
 
@@ -661,6 +819,11 @@ pub fn run() {
                         if let Some(state) = handle.try_state::<AppState>() {
                             if let Err(e) = state.db.replace_catalog(&file.games, "remote") {
                                 eprintln!("catalog: failed to cache remote copy: {e}");
+                            }
+                            // Only replace runtimes when the remote actually
+                            // carries them; an older catalog must not wipe ours.
+                            if !file.runtimes.is_empty() {
+                                let _ = state.db.set_runtimes(&file.runtimes);
                             }
                         }
                     }
@@ -683,6 +846,8 @@ pub fn run() {
             install_game,
             cancel_install,
             uninstall_game,
+            launch_game,
+            running_games,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

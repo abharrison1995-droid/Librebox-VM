@@ -1,0 +1,418 @@
+//! Launching an installed game.
+//!
+//! Runtimes (DOSBox Staging, ScummVM) are fetched on demand through the same
+//! download pipeline as games, so acquiring one is just another verified zip.
+//! DOSBox needs a generated `.conf`; ScummVM and native games are launched
+//! with arguments alone.
+
+use crate::catalog::RuntimeSpec;
+use crate::download::{self, InstallError};
+use serde_json::Value;
+use std::path::{Path, PathBuf};
+
+/// Where a runtime's files live once extracted.
+pub fn runtime_dir(root: &Path, runtime_id: &str, version: &str) -> PathBuf {
+    // Versioned so upgrading a runtime does not have to uninstall the old one
+    // and cannot half-overwrite it.
+    root.join("runtimes").join(format!("{runtime_id}-{version}"))
+}
+
+/// Path to a runtime's executable, if it is already installed.
+pub fn installed_runtime(root: &Path, spec: &RuntimeSpec) -> Option<PathBuf> {
+    let dir = runtime_dir(root, &spec.id, &spec.version);
+    if !dir.exists() {
+        return None;
+    }
+    download::resolve_executable(&dir, &spec.executable).map(|rel| dir.join(rel))
+}
+
+/// Downloads, verifies and extracts a runtime, returning the path to its
+/// executable. A no-op if it is already present.
+pub async fn ensure_runtime<F>(
+    root: &Path,
+    spec: &RuntimeSpec,
+    cancel: &std::sync::atomic::AtomicBool,
+    on_progress: F,
+) -> Result<PathBuf, InstallError>
+where
+    F: FnMut(u64, Option<u64>),
+{
+    if let Some(exe) = installed_runtime(root, spec) {
+        return Ok(exe);
+    }
+    if !download::is_supported_format(spec.download.format.as_deref()) {
+        return Err(InstallError::UnsupportedFormat(
+            spec.download.format.clone().unwrap_or_default(),
+        ));
+    }
+
+    let part = root
+        .join("downloads")
+        .join(format!("runtime-{}.part", spec.id));
+    let staging = root.join("staging").join(format!("runtime-{}", spec.id));
+    let dest = runtime_dir(root, &spec.id, &spec.version);
+
+    let result = async {
+        download::download_to_file(&spec.download.url, &part, cancel, on_progress).await?;
+        if let Some(expected) = spec.download.sha256.as_deref() {
+            download::verify_sha256(&part, expected).await?;
+        }
+        let _ = std::fs::remove_dir_all(&staging);
+        download::extract_zip(&part, &staging).await?;
+        download::resolve_executable(&staging, &spec.executable)
+            .ok_or_else(|| InstallError::ExecutableNotFound(spec.executable.clone()))?;
+        download::promote(&staging, &dest)
+    }
+    .await;
+
+    let _ = std::fs::remove_file(&part);
+    let _ = std::fs::remove_dir_all(&staging);
+    result?;
+
+    installed_runtime(root, spec).ok_or_else(|| {
+        InstallError::ExecutableNotFound(spec.executable.clone())
+    })
+}
+
+/// Maps the catalog's `sound` value onto DOSBox sound-card settings.
+///
+/// This is the practical form of the "drivers on demand" idea: a game that
+/// comes up silent or with the wrong music usually just needs a different card.
+fn sound_settings(sound: Option<&str>) -> (&'static str, &'static str) {
+    // (sbtype, pcspeaker)
+    match sound.unwrap_or("sb16") {
+        "none" => ("none", "off"),
+        "pcspeaker" => ("none", "on"),
+        // Adlib is the OPL chip; DOSBox exposes it through sbtype.
+        "adlib" => ("none", "off"),
+        _ => ("sb16", "off"),
+    }
+}
+
+/// Builds a DOSBox Staging `.conf` that mounts the install directory as C: and
+/// runs the game.
+///
+/// `exe_rel` is the executable's path *relative to the install directory* — the
+/// value resolved at install time, which is why the launcher never has to guess
+/// whether a game sits at the archive root.
+pub fn dosbox_conf(install_dir: &Path, exe_rel: &Path, config: &Value) -> String {
+    let cycles = config
+        .get("cpu_cycles")
+        .and_then(Value::as_str)
+        .unwrap_or("auto");
+    let aspect = config
+        .get("aspect")
+        .and_then(Value::as_bool)
+        .unwrap_or(true);
+    let (sbtype, pcspeaker) = sound_settings(config.get("sound").and_then(Value::as_str));
+
+    // Split the resolved path into the directory to cd into and the program to
+    // run, both relative to the mount point.
+    let dir = exe_rel
+        .parent()
+        .filter(|p| !p.as_os_str().is_empty())
+        .map(|p| p.to_string_lossy().replace('/', "\\"));
+    let exe = exe_rel
+        .file_name()
+        .map(|f| f.to_string_lossy().to_string())
+        .unwrap_or_default();
+
+    let mut autoexec = String::new();
+    autoexec.push_str(&format!("mount c \"{}\"\n", install_dir.display()));
+    autoexec.push_str("c:\n");
+    if let Some(d) = dir {
+        autoexec.push_str(&format!("cd {d}\n"));
+    }
+    autoexec.push_str(&format!("{exe}\n"));
+    // Without this DOSBox sits at a prompt after the game exits, and the
+    // process never ends, so playtime would never be recorded.
+    autoexec.push_str("exit\n");
+
+    format!(
+        "# Generated by Librebox. Edits will be overwritten on next launch.\n\
+         [sdl]\n\
+         fullscreen = false\n\
+         \n\
+         [cpu]\n\
+         cycles = {cycles}\n\
+         \n\
+         [render]\n\
+         aspect = {aspect}\n\
+         \n\
+         [sblaster]\n\
+         sbtype = {sbtype}\n\
+         \n\
+         [speaker]\n\
+         pcspeaker = {pcspeaker}\n\
+         \n\
+         [autoexec]\n\
+         {autoexec}"
+    )
+}
+
+/// A fully resolved launch: the program to run and its arguments.
+#[derive(Debug, Clone)]
+pub struct LaunchPlan {
+    pub program: PathBuf,
+    pub args: Vec<String>,
+    /// Directory to run in. Matters for games that expect their own cwd.
+    pub cwd: PathBuf,
+}
+
+/// Works out how to start a game, writing a DOSBox config first when needed.
+pub fn plan_launch(
+    runtime: &str,
+    runtime_exe: Option<&Path>,
+    install_dir: &Path,
+    config: &Value,
+    conf_path: &Path,
+) -> Result<LaunchPlan, String> {
+    let exe_rel = config
+        .get("executable_path")
+        .and_then(Value::as_str)
+        .map(PathBuf::from);
+
+    match runtime {
+        "dosbox" => {
+            let dosbox = runtime_exe.ok_or("DOSBox is not installed")?;
+            let rel = exe_rel.ok_or(
+                "this game has no resolved executable — reinstall it to repair the entry",
+            )?;
+            let conf = dosbox_conf(install_dir, &rel, config);
+            if let Some(parent) = conf_path.parent() {
+                std::fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+            }
+            std::fs::write(conf_path, conf).map_err(|e| e.to_string())?;
+            Ok(LaunchPlan {
+                program: dosbox.to_path_buf(),
+                args: vec![
+                    "-conf".into(),
+                    conf_path.to_string_lossy().to_string(),
+                    "-noconsole".into(),
+                ],
+                cwd: install_dir.to_path_buf(),
+            })
+        }
+        "scummvm" => {
+            let scummvm = runtime_exe.ok_or("ScummVM is not installed")?;
+            let game_id = config
+                .get("game_id")
+                .and_then(Value::as_str)
+                .ok_or("this game has no ScummVM game id")?;
+            Ok(LaunchPlan {
+                program: scummvm.to_path_buf(),
+                args: vec![
+                    format!("--path={}", install_dir.display()),
+                    game_id.to_string(),
+                ],
+                cwd: install_dir.to_path_buf(),
+            })
+        }
+        "native" => {
+            let rel = exe_rel.ok_or(
+                "this game has no resolved executable — reinstall it to repair the entry",
+            )?;
+            let program = install_dir.join(&rel);
+            if !program.exists() {
+                return Err(format!("{} is missing from the install", rel.display()));
+            }
+            Ok(LaunchPlan {
+                // Native games often load assets relative to their own folder.
+                cwd: program.parent().unwrap_or(install_dir).to_path_buf(),
+                program,
+                args: Vec::new(),
+            })
+        }
+        "86box" => Err("86Box support is not implemented yet".into()),
+        other => Err(format!("unknown runtime '{other}'")),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn dosbox_conf_mounts_and_runs_a_root_level_game() {
+        let conf = dosbox_conf(
+            Path::new("C:\\games\\doom"),
+            Path::new("DOOM.EXE"),
+            &json!({ "cpu_cycles": "20000", "sound": "sb16", "aspect": true }),
+        );
+        assert!(conf.contains("mount c \"C:\\games\\doom\""));
+        assert!(conf.contains("cycles = 20000"));
+        assert!(conf.contains("sbtype = sb16"));
+        assert!(conf.contains("aspect = true"));
+        assert!(conf.contains("DOOM.EXE"));
+        assert!(!conf.contains("\ncd "), "no cd needed at the archive root");
+        assert!(conf.trim_end().ends_with("exit"), "must exit so playtime is recorded");
+    }
+
+    #[test]
+    fn dosbox_conf_cds_into_a_subdirectory() {
+        // The real Commander Keen archive nests the executable.
+        let conf = dosbox_conf(
+            Path::new("C:\\games\\keen"),
+            Path::new("CKeen1/KEEN1.EXE"),
+            &json!({ "cpu_cycles": "3000", "sound": "pcspeaker" }),
+        );
+        assert!(conf.contains("cd CKeen1\n"), "must cd into the game directory");
+        assert!(conf.contains("KEEN1.EXE\n"));
+        assert!(!conf.contains("CKeen1/KEEN1.EXE"), "should not run the full path");
+    }
+
+    #[test]
+    fn pcspeaker_disables_the_sound_card() {
+        let conf = dosbox_conf(
+            Path::new("C:\\g"),
+            Path::new("A.EXE"),
+            &json!({ "sound": "pcspeaker" }),
+        );
+        assert!(conf.contains("sbtype = none"));
+        assert!(conf.contains("pcspeaker = on"));
+    }
+
+    #[test]
+    fn conf_falls_back_sensibly_on_an_empty_config() {
+        let conf = dosbox_conf(Path::new("C:\\g"), Path::new("A.EXE"), &json!({}));
+        assert!(conf.contains("cycles = auto"));
+        assert!(conf.contains("aspect = true"));
+        assert!(conf.contains("sbtype = sb16"));
+    }
+
+    #[test]
+    fn plans_a_dosbox_launch_and_writes_the_conf() {
+        let dir = tempfile::tempdir().unwrap();
+        let conf_path = dir.path().join("conf").join("game.conf");
+        let plan = plan_launch(
+            "dosbox",
+            Some(Path::new("C:\\rt\\dosbox.exe")),
+            Path::new("C:\\games\\doom"),
+            &json!({ "executable_path": "DOOM.EXE" }),
+            &conf_path,
+        )
+        .unwrap();
+
+        assert_eq!(plan.program, PathBuf::from("C:\\rt\\dosbox.exe"));
+        assert!(plan.args.contains(&"-conf".to_string()));
+        assert!(conf_path.exists(), "the conf must actually be written");
+        assert!(std::fs::read_to_string(&conf_path).unwrap().contains("DOOM.EXE"));
+    }
+
+    #[test]
+    fn plans_a_scummvm_launch() {
+        let dir = tempfile::tempdir().unwrap();
+        let plan = plan_launch(
+            "scummvm",
+            Some(Path::new("C:\\rt\\scummvm.exe")),
+            Path::new("C:\\games\\sky"),
+            &json!({ "game_id": "sky" }),
+            &dir.path().join("unused.conf"),
+        )
+        .unwrap();
+        assert!(plan.args.iter().any(|a| a == "sky"));
+        assert!(plan.args.iter().any(|a| a.starts_with("--path=")));
+    }
+
+    #[test]
+    fn plans_a_native_launch_from_the_games_own_directory() {
+        let dir = tempfile::tempdir().unwrap();
+        let sub = dir.path().join("bin");
+        std::fs::create_dir_all(&sub).unwrap();
+        std::fs::write(sub.join("game.exe"), b"").unwrap();
+
+        let plan = plan_launch(
+            "native",
+            None,
+            dir.path(),
+            &json!({ "executable_path": "bin/game.exe" }),
+            &dir.path().join("unused.conf"),
+        )
+        .unwrap();
+        assert_eq!(plan.program, sub.join("game.exe"));
+        assert_eq!(plan.cwd, sub, "native games often load assets relative to cwd");
+    }
+
+    #[test]
+    fn native_launch_fails_when_the_executable_is_gone() {
+        let dir = tempfile::tempdir().unwrap();
+        let err = plan_launch(
+            "native",
+            None,
+            dir.path(),
+            &json!({ "executable_path": "missing.exe" }),
+            &dir.path().join("unused.conf"),
+        )
+        .unwrap_err();
+        assert!(err.contains("missing"), "got: {err}");
+    }
+
+    #[test]
+    fn unresolved_executable_is_a_clear_error() {
+        let dir = tempfile::tempdir().unwrap();
+        // A game installed before executable resolution existed.
+        let err = plan_launch(
+            "dosbox",
+            Some(Path::new("C:\\rt\\dosbox.exe")),
+            Path::new("C:\\g"),
+            &json!({ "executable": "DOOM.EXE" }),
+            &dir.path().join("g.conf"),
+        )
+        .unwrap_err();
+        assert!(err.contains("reinstall"), "got: {err}");
+    }
+
+    #[test]
+    fn eighty_six_box_is_refused_not_attempted() {
+        let dir = tempfile::tempdir().unwrap();
+        let err = plan_launch("86box", None, Path::new("C:\\g"), &json!({}), &dir.path().join("x"))
+            .unwrap_err();
+        assert!(err.contains("not implemented"));
+    }
+
+    /// Fetches DOSBox Staging for real and confirms we can find its executable
+    /// inside the archive, and that a second call is a no-op.
+    ///
+    ///   cargo test --lib -- --ignored real_
+    #[tokio::test]
+    #[ignore = "hits the network"]
+    async fn real_runtime_acquisition() {
+        let bundled = crate::catalog::load_bundled().unwrap();
+        let spec = bundled
+            .runtimes
+            .get("dosbox")
+            .expect("catalog must declare a dosbox runtime")
+            .clone();
+
+        let dir = tempfile::tempdir().unwrap();
+        let root = dir.path();
+        assert!(installed_runtime(root, &spec).is_none(), "starts absent");
+
+        let cancel = std::sync::atomic::AtomicBool::new(false);
+        let exe = ensure_runtime(root, &spec, &cancel, |_, _| {})
+            .await
+            .expect("dosbox should install");
+
+        assert!(exe.exists(), "resolved executable must exist");
+        assert!(exe.ends_with("dosbox.exe"));
+        eprintln!("dosbox at {}", exe.display());
+
+        // Scratch files must not survive.
+        assert!(!root.join("staging").join("runtime-dosbox").exists());
+
+        // Idempotent: the second call finds it rather than downloading again.
+        let again = ensure_runtime(root, &spec, &cancel, |_, _| {
+            panic!("must not re-download an installed runtime");
+        })
+        .await
+        .unwrap();
+        assert_eq!(again, exe);
+    }
+
+    #[test]
+    fn runtime_dir_is_versioned() {
+        let d = runtime_dir(Path::new("C:\\app"), "dosbox", "0.82.2");
+        assert!(d.ends_with("dosbox-0.82.2"), "upgrades must not collide");
+    }
+}

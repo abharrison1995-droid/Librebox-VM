@@ -1,7 +1,7 @@
-use crate::catalog::{CatalogFilter, CatalogGame, DownloadInfo};
+use crate::catalog::{CatalogFilter, CatalogGame, DownloadInfo, RuntimeSpec};
 use rusqlite::{Connection, Result, params, params_from_iter};
 use serde::{Deserialize, Serialize};
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::path::Path;
 use std::sync::Mutex;
 
@@ -385,6 +385,42 @@ impl Database {
         rows.next().transpose()
     }
 
+    /// Runtimes are few and only ever read as a set, so they live as one JSON
+    /// blob in `catalog_meta` rather than earning their own table.
+    pub fn set_runtimes(&self, runtimes: &HashMap<String, RuntimeSpec>) -> Result<()> {
+        let json = serde_json::to_string(runtimes).unwrap_or_else(|_| "{}".into());
+        let conn = self.conn.lock().unwrap();
+        conn.execute(
+            "INSERT INTO catalog_meta (key, value) VALUES ('runtimes', ?1)
+             ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+            params![json],
+        )?;
+        Ok(())
+    }
+
+    pub fn get_runtime(&self, id: &str) -> Result<Option<RuntimeSpec>> {
+        Ok(self.get_runtimes()?.remove(id))
+    }
+
+    pub fn get_runtimes(&self) -> Result<HashMap<String, RuntimeSpec>> {
+        Ok(self
+            .catalog_meta_get("runtimes")?
+            .and_then(|j| serde_json::from_str(&j).ok())
+            .unwrap_or_default())
+    }
+
+    /// Adds a play session. Done as one statement so two sessions finishing at
+    /// once cannot lose an increment the way a read-modify-write would.
+    pub fn record_play(&self, id: &str, seconds: i64) -> Result<()> {
+        let conn = self.conn.lock().unwrap();
+        conn.execute(
+            "UPDATE games SET playtime_s = playtime_s + ?2, last_played = datetime('now')
+             WHERE id = ?1",
+            params![id, seconds],
+        )?;
+        Ok(())
+    }
+
     pub fn catalog_meta_get(&self, key: &str) -> Result<Option<String>> {
         let conn = self.conn.lock().unwrap();
         let mut stmt = conn.prepare("SELECT value FROM catalog_meta WHERE key = ?1")?;
@@ -646,6 +682,49 @@ mod tests {
         let ids = db.installed_catalog_ids().unwrap();
         assert_eq!(ids.len(), 1);
         assert!(ids.contains("doom-shareware"));
+    }
+
+    #[test]
+    fn record_play_accumulates_and_stamps() {
+        let (db, _dir) = temp_db();
+        db.add_game(&byo("g1", "Doom")).unwrap();
+
+        db.record_play("g1", 600).unwrap();
+        db.record_play("g1", 300).unwrap();
+
+        let g = db.get_game("g1").unwrap().unwrap();
+        assert_eq!(g.playtime_s, 900, "sessions must add, not overwrite");
+        assert!(g.last_played.is_some(), "last_played must be stamped");
+    }
+
+    #[test]
+    fn runtimes_round_trip() {
+        let (db, _dir) = temp_db();
+        let bundled = catalog::load_bundled().unwrap();
+        assert!(!bundled.runtimes.is_empty(), "catalog must declare runtimes");
+
+        db.set_runtimes(&bundled.runtimes).unwrap();
+        let dosbox = db.get_runtime("dosbox").unwrap().expect("dosbox must persist");
+        assert_eq!(dosbox.executable, "dosbox.exe");
+        assert!(dosbox.download.sha256.is_some());
+        assert!(db.get_runtime("nope").unwrap().is_none());
+    }
+
+    #[test]
+    fn every_declared_game_runtime_is_obtainable() {
+        // A game whose runtime the catalog does not provide can never launch.
+        let bundled = catalog::load_bundled().unwrap();
+        for g in &bundled.games {
+            if g.runtime == "native" || g.runtime == "86box" {
+                continue;
+            }
+            assert!(
+                bundled.runtimes.contains_key(&g.runtime),
+                "{} needs runtime '{}' which the catalog does not provide",
+                g.id,
+                g.runtime
+            );
+        }
     }
 
     #[test]

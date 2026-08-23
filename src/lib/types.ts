@@ -97,6 +97,25 @@ export function isInstallable(game: CatalogGame): boolean {
   );
 }
 
+/** Payload of `runtime:progress`, emitted while fetching DOSBox or ScummVM. */
+export interface RuntimeProgress {
+  runtime: string;
+  name: string;
+  downloaded: number;
+  total: number | null;
+}
+
+export interface RunningGame {
+  game_id: string;
+  title: string;
+}
+
+export interface GameExited {
+  game_id: string;
+  seconds: number;
+  ok: boolean;
+}
+
 export type Runtime = "dosbox" | "scummvm" | "native" | "86box";
 export type License = "freeware" | "shareware" | "open-source" | "public-domain";
 
