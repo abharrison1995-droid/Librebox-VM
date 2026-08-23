@@ -1,44 +1,88 @@
-# Librebox VM
+# Librebox
 
-A retro gaming VM sandbox frontend that brings classic games to your fingertips. Librebox provides simplified downloads for a curated collection of free classic games, packaged in an easy-to-use virtual machine environment.
+A retro PC gaming launcher with a curated catalog of games that are genuinely
+free to download — freeware, open source, and publisher-released shareware.
+Wrapped in a Windows XP Luna interface, because that is the era.
 
-## Features
+> **Status: early development.** The catalog and library browser work. Actually
+> downloading and launching games does not yet — see the [Roadmap](#roadmap).
 
-- **Retro Game Library**: Play a curated selection of classic games in an isolated VM sandbox
-- **Simplified Downloads**: One-click game installation with no complex setup required
-- **Driver Management**: On-demand driver installation and troubleshooting tools
-- **System Diagnostics**: Built-in tools to help diagnose and resolve compatibility issues
-- **Lightweight**: Desktop application built with Tauri for minimal resource usage
+## What works today
 
-## Technology Stack
+- **Curated catalog** — 40 hand-verified titles: DOOM, Wolfenstein 3D,
+  Commander Keen, Tyrian 2000, Beneath a Steel Sky, OpenTTD, Cave Story and
+  more. Every download URL is checked by CI-able tooling before it ships.
+- **Browse and filter** — search by title, developer or publisher, and filter
+  by platform, runtime, or licence.
+- **Licence transparency** — every entry states what makes it free and links to
+  a page corroborating that. See [`catalog/README.md`](catalog/README.md).
+- **Offline-capable** — the catalog is fetched at launch and cached locally, with
+  a copy bundled into the app so it works on a fresh install with no network.
+- **Library** — tracks the games you own, kept strictly separate from the
+  catalog so refreshing one never disturbs the other.
+- **XP Luna interface** — custom title bar, taskbar, and tabbed navigation.
 
-Built with:
-- **Frontend**: [SvelteKit](https://kit.svelte.dev/) + TypeScript + [Vite](https://vitejs.dev/)
-- **Desktop**: [Tauri](https://tauri.app/) for cross-platform app distribution
+## Roadmap
 
-## Getting Started
+In rough order:
 
-### Prerequisites
-- [Node.js](https://nodejs.org/) (v18+)
-- [Rust](https://www.rust-lang.org/tools/install)
+1. **Downloads and installs** — fetch, checksum-verify, and extract catalog
+   entries to disk with progress reporting.
+2. **Launching** — DOSBox-Staging and ScummVM integration, plus direct execution
+   for native games. Playtime and last-played tracking.
+3. **Per-game troubleshooting profiles** — the practical version of "drivers on
+   demand": per-title sound card, CPU cycle, and aspect-ratio overrides, so a
+   game that runs silently or at ludicrous speed can be fixed from the UI.
+4. **VM sandbox (before 1.0)** — 86Box integration for Win9x-era titles, with
+   guest driver management. The catalog schema already carries an `86box`
+   runtime; such entries display as "Not yet playable" until this lands.
 
-### Development
+## Technology
+
+- **Frontend** — [SvelteKit](https://kit.svelte.dev/) 5 + TypeScript + [Vite](https://vitejs.dev/)
+- **Backend** — [Tauri](https://tauri.app/) 2 with a Rust core and SQLite storage
+
+## Development
+
+Requires [Node.js](https://nodejs.org/) 18+ and
+[Rust](https://www.rust-lang.org/tools/install).
 
 ```bash
-# Install dependencies
 npm install
-
-# Run in development mode
-npm run dev
-
-# Build the desktop app
-npm run tauri build
 ```
 
-## Recommended IDE Setup
+```bash
+npm run tauri dev
+```
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+Other useful commands:
 
-## License
+| Command | Purpose |
+|---|---|
+| `npm run check` | TypeScript and Svelte type checking |
+| `npm run lint:catalog` | Validate `catalog.json` structure |
+| `npm run lint:catalog:urls` | Also verify every download URL still resolves |
+| `cargo test` (in `src-tauri/`) | Rust unit and integration tests |
 
-MIT
+The catalog URL can be overridden at build time with `LIBREBOX_CATALOG_URL`.
+
+## Contributing a game
+
+Read [`catalog/README.md`](catalog/README.md) for the inclusion criteria and
+entry format, then open a pull request. Every entry needs a licence
+justification and a working, durable download URL.
+
+## Legal
+
+Librebox lists **only** games that are lawfully free to redistribute: freeware,
+open-source, public-domain, and shareware episodes still distributed by their
+rights holders. It hosts no game files of its own — every download points at the
+publisher's own infrastructure or the Internet Archive.
+
+If you hold rights to something listed here and want it removed, open an issue.
+See [`catalog/README.md`](catalog/README.md#takedown).
+
+## Licence
+
+MIT — see [`package.json`](package.json). This covers the Librebox application
+only. Catalogued games remain under their own respective licences.

@@ -2,6 +2,7 @@
   import "$lib/theme/luna.css";
   import TitleBar from "$lib/components/TitleBar.svelte";
   import Taskbar from "$lib/components/Taskbar.svelte";
+  import TabStrip from "$lib/components/TabStrip.svelte";
   import type { Snippet } from "svelte";
 
   let { children }: { children: Snippet } = $props();
@@ -9,6 +10,7 @@
 
 <div class="app-shell">
   <TitleBar />
+  <TabStrip />
   <main class="app-content">
     {@render children()}
   </main>

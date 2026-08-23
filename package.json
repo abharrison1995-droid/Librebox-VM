@@ -9,6 +9,8 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint:catalog": "node catalog/lint.mjs",
+    "lint:catalog:urls": "node catalog/lint.mjs --check-urls",
     "tauri": "tauri"
   },
   "license": "MIT",
