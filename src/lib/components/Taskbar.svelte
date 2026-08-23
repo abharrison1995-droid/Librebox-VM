@@ -1,9 +1,11 @@
 <script lang="ts">
   import { downloads } from "$lib/downloads.svelte";
+  import { launcher } from "$lib/launcher.svelte";
 
   let now = $state(new Date());
 
   let active = $derived(Object.entries(downloads.active));
+  let running = $derived(Object.entries(launcher.running));
 
   function percent(downloaded: number, total: number | null): string {
     if (!total) return "";
@@ -34,7 +36,11 @@
   </button>
 
   <div class="taskbar-apps">
-    <!-- Active installs; running game buttons will join them here. -->
+    {#each running as [gameId, title] (gameId)}
+      <span class="task-button running" title="{title} is running">
+        <span class="task-label">{title}</span>
+      </span>
+    {/each}
     {#each active as [catalogId, job] (catalogId)}
       <span class="task-button" title="{catalogId}: {job.phase}">
         <span class="task-label">{catalogId}{percent(job.downloaded, job.total)}</span>
@@ -63,6 +69,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+  /* A running game reads as pressed-in, the way an active XP task button did. */
+  .task-button.running {
+    background: rgba(0, 0, 0, 0.22);
+    border-color: rgba(0, 0, 0, 0.3);
+    font-weight: 600;
   }
 
   .taskbar {

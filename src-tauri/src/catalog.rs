@@ -49,6 +49,21 @@ pub struct CatalogGame {
     pub runtime_config: serde_json::Value,
 }
 
+/// An emulator or interpreter Librebox fetches on demand. Described in the
+/// catalog rather than hardcoded so a version bump needs no app release, and
+/// so it is downloaded and hash-verified by exactly the same pipeline as games.
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct RuntimeSpec {
+    pub id: String,
+    pub name: String,
+    pub version: String,
+    /// Executable to look for inside the extracted archive.
+    pub executable: String,
+    pub source_url: Option<String>,
+    pub license_note: Option<String>,
+    pub download: DownloadInfo,
+}
+
 #[derive(Debug, Deserialize)]
 pub struct CatalogFile {
     pub schema_version: u32,
@@ -57,6 +72,10 @@ pub struct CatalogFile {
     #[serde(default)]
     #[allow(dead_code)]
     pub updated: Option<String>,
+    /// Keyed by runtime id (`dosbox`, `scummvm`). Optional so a catalog written
+    /// before runtimes existed still parses.
+    #[serde(default)]
+    pub runtimes: std::collections::HashMap<String, RuntimeSpec>,
     pub games: Vec<CatalogGame>,
 }
 

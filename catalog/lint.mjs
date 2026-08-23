@@ -64,6 +64,47 @@ if (!Array.isArray(catalog.games)) {
   process.exit(1);
 }
 
+// ------------------------------------------------------------- runtimes
+
+// Emulators are fetched and verified by the same pipeline as games, so they
+// are held to the same standard.
+const RUNTIME_REQUIRED = ["id", "name", "version", "executable", "download"];
+
+for (const [key, rt] of Object.entries(catalog.runtimes ?? {})) {
+  const id = `runtime:${key}`;
+  for (const field of RUNTIME_REQUIRED) {
+    if (rt[field] === undefined || rt[field] === null || rt[field] === "") {
+      err(id, `missing required field '${field}'`);
+    }
+  }
+  if (rt.id && rt.id !== key) {
+    err(id, `id '${rt.id}' does not match its key '${key}'`);
+  }
+  if (!RUNTIMES.includes(key)) {
+    err(id, `'${key}' is not a known runtime`);
+  }
+  const dl = rt.download;
+  if (dl && typeof dl === "object") {
+    if (!dl.url || !isHttpUrl(dl.url)) err(id, `download.url is not a valid URL: ${dl.url}`);
+    // Only zip can be unpacked automatically, and a runtime the user cannot
+    // install automatically defeats the point.
+    if (dl.format !== "zip") err(id, `download.format must be 'zip', got '${dl.format}'`);
+    if (dl.sha256 == null) err(id, "no sha256 recorded — run `npm run hash:catalog`");
+    else if (!/^[a-f0-9]{64}$/.test(dl.sha256)) err(id, "download.sha256 must be 64 lowercase hex chars");
+  }
+}
+
+// Every runtime a game declares must actually be obtainable, or that game can
+// never be launched.
+const declaredRuntimes = new Set(Object.keys(catalog.runtimes ?? {}));
+for (const rt of new Set(catalog.games.map((g) => g.runtime))) {
+  // native needs no runtime; 86box is knowingly unimplemented.
+  if (rt === "native" || rt === "86box") continue;
+  if (!declaredRuntimes.has(rt)) {
+    err("<file>", `games declare runtime '${rt}' but the catalog does not provide it`);
+  }
+}
+
 // ---------------------------------------------------------- structural
 
 const seen = new Set();

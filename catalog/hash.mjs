@@ -21,7 +21,14 @@ const CATALOG_PATH = join(HERE, "catalog.json");
 const force = process.argv.includes("--force");
 
 const catalog = JSON.parse(readFileSync(CATALOG_PATH, "utf8"));
-const todo = catalog.games.filter((g) => force || !g.download.sha256);
+
+// Runtimes are downloaded and verified by the same pipeline as games, so they
+// need hashes too.
+const downloadables = [
+  ...Object.values(catalog.runtimes ?? {}).map((r) => ({ id: `runtime:${r.id}`, download: r.download })),
+  ...catalog.games,
+];
+const todo = downloadables.filter((g) => force || !g.download.sha256);
 
 if (todo.length === 0) {
   console.log("Every entry already has a sha256.");
@@ -78,8 +85,10 @@ for (const [i, game] of todo.entries()) {
 
 save();
 
-const remaining = catalog.games.filter((g) => !g.download.sha256).length;
-console.log(`\nDone. ${catalog.games.length - remaining}/${catalog.games.length} entries hashed.`);
+const remaining = downloadables.filter((g) => !g.download.sha256).length;
+console.log(
+  `\nDone. ${downloadables.length - remaining}/${downloadables.length} entries hashed.`
+);
 
 if (failures.length) {
   console.error(`\n${failures.length} failure(s):`);
