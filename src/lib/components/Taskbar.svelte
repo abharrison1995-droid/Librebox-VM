@@ -1,5 +1,14 @@
 <script lang="ts">
+  import { downloads } from "$lib/downloads.svelte";
+
   let now = $state(new Date());
+
+  let active = $derived(Object.entries(downloads.active));
+
+  function percent(downloaded: number, total: number | null): string {
+    if (!total) return "";
+    return ` ${Math.round((downloaded / total) * 100)}%`;
+  }
 
   $effect(() => {
     const interval = setInterval(() => {
@@ -25,7 +34,12 @@
   </button>
 
   <div class="taskbar-apps">
-    <!-- Running game buttons will appear here -->
+    <!-- Active installs; running game buttons will join them here. -->
+    {#each active as [catalogId, job] (catalogId)}
+      <span class="task-button" title="{catalogId}: {job.phase}">
+        <span class="task-label">{catalogId}{percent(job.downloaded, job.total)}</span>
+      </span>
+    {/each}
   </div>
 
   <div class="system-tray">
@@ -34,6 +48,23 @@
 </footer>
 
 <style>
+  .task-button {
+    display: flex;
+    align-items: center;
+    max-width: 180px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    color: #fff;
+    font-size: 11px;
+  }
+  .task-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .taskbar {
     display: flex;
     align-items: center;

@@ -12,6 +12,7 @@
     "lint:catalog": "node catalog/lint.mjs",
     "lint:catalog:urls": "node catalog/lint.mjs --check-urls",
     "build:site": "node catalog/build-site.mjs",
+    "hash:catalog": "node catalog/hash.mjs",
     "tauri": "tauri"
   },
   "license": "MIT",

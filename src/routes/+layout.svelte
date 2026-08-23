@@ -3,9 +3,17 @@
   import TitleBar from "$lib/components/TitleBar.svelte";
   import Taskbar from "$lib/components/Taskbar.svelte";
   import TabStrip from "$lib/components/TabStrip.svelte";
+  import { downloads } from "$lib/downloads.svelte";
   import type { Snippet } from "svelte";
 
   let { children }: { children: Snippet } = $props();
+
+  // Registered here, not in a route: an install must survive navigating
+  // between the Library and Catalog tabs.
+  $effect(() => {
+    downloads.init();
+    return () => downloads.destroy();
+  });
 </script>
 
 <div class="app-shell">

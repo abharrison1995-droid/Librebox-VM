@@ -11,6 +11,7 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 
 [dev-dependencies]
 tempfile = "3"
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
@@ -22,5 +23,9 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 rusqlite = { version = "0.32", features = ["bundled"] }
 # rustls avoids an OpenSSL toolchain dependency on Windows.
-reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "stream"] }
 uuid = { version = "1", features = ["v4"] }
+sha2 = "0.10"
+zip = "2"
+tokio = { version = "1", features = ["fs", "io-util"] }
+futures-util = "0.3"
