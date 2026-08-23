@@ -1,5 +1,6 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
+  import { goto } from "$app/navigation";
   import { openUrl } from "@tauri-apps/plugin-opener";
   import CatalogCard from "$lib/components/CatalogCard.svelte";
   import CoverTile from "$lib/components/CoverTile.svelte";
@@ -10,7 +11,14 @@
     formatSize,
     formatSyncTime,
   } from "$lib/format";
-  import { isPlayable, type CatalogGame, type CatalogStatus, type SyncResult } from "$lib/types";
+  import {
+    isPlayable,
+    isInstallable,
+    type CatalogGame,
+    type CatalogStatus,
+    type SyncResult,
+  } from "$lib/types";
+  import { downloads } from "$lib/downloads.svelte";
 
   let games = $state<CatalogGame[]>([]);
   let status = $state<CatalogStatus | null>(null);
@@ -26,6 +34,14 @@
   let search = $state("");
 
   let selectedGame = $derived(games.find((g) => g.id === selectedId) ?? null);
+  let selectedInstall = $derived(selectedGame ? downloads.active[selectedGame.id] ?? null : null);
+  let selectedError = $derived(selectedGame ? downloads.errors[selectedGame.id] ?? null : null);
+
+  const PHASE_LABEL = {
+    downloading: "Downloading…",
+    verifying: "Verifying…",
+    extracting: "Extracting…",
+  } as const;
 
   async function load() {
     try {
@@ -212,6 +228,8 @@
             <CatalogCard
               {game}
               selected={selectedId === game.id}
+              installed={downloads.isInstalled(game.id)}
+              install={downloads.active[game.id] ?? null}
               onclick={() => (selectedId = game.id)}
             />
           {/each}
@@ -282,14 +300,49 @@
           </button>
         {/if}
 
-        <button class="xp-button install-button" disabled>
-          {isPlayable(selectedGame.runtime) ? "Install (coming soon)" : "Not yet playable"}
-        </button>
-        <p class="install-hint">
-          {isPlayable(selectedGame.runtime)
-            ? "Downloads are not implemented yet."
-            : `${runtimeLabel(selectedGame.runtime)} support is on the roadmap.`}
-        </p>
+        {#if selectedInstall}
+          <div class="install-status">
+            <span class="install-phase-label">{PHASE_LABEL[selectedInstall.phase]}</span>
+            {#if selectedInstall.total}
+              <span class="install-bytes">
+                {formatSize(selectedInstall.downloaded)} / {formatSize(selectedInstall.total)}
+              </span>
+            {/if}
+          </div>
+          <button class="xp-button install-button" onclick={() => downloads.cancel(selectedGame!.id)}>
+            Cancel
+          </button>
+        {:else if downloads.isInstalled(selectedGame.id)}
+          <button class="xp-button install-button" onclick={() => goto("/")}>
+            Installed — view in Library
+          </button>
+        {:else if isInstallable(selectedGame)}
+          <button class="xp-button install-button" onclick={() => downloads.start(selectedGame!.id)}>
+            Install
+          </button>
+          <p class="install-hint">{formatSize(selectedGame.download.size_bytes)} download</p>
+        {:else}
+          <button class="xp-button install-button" disabled>
+            {isPlayable(selectedGame.runtime) ? "Manual install only" : "Not yet playable"}
+          </button>
+          <p class="install-hint">
+            {#if !isPlayable(selectedGame.runtime)}
+              {runtimeLabel(selectedGame.runtime)} support is on the roadmap.
+            {:else}
+              This title ships as an installer rather than an archive, so it
+              cannot be set up automatically yet.
+            {/if}
+          </p>
+        {/if}
+
+        {#if selectedError}
+          <p class="install-error" role="alert">
+            {selectedError}
+            <button class="dismiss" onclick={() => downloads.dismissError(selectedGame!.id)}>
+              Dismiss
+            </button>
+          </p>
+        {/if}
       </aside>
     {/if}
   </div>
@@ -544,6 +597,46 @@
     color: var(--luna-text-disabled);
     text-align: center;
     margin: 0;
+  }
+
+  .install-status {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+  }
+  .install-phase-label {
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .install-bytes {
+    font-family: var(--luna-font-mono);
+    font-size: 10px;
+    color: var(--luna-text-secondary);
+  }
+
+  .install-error {
+    font-size: 10px;
+    line-height: 1.4;
+    color: #7a1c1c;
+    background: #fbe6e6;
+    border: 1px solid #d48a8a;
+    border-radius: 3px;
+    padding: 5px 6px;
+    margin: 0;
+  }
+  .dismiss {
+    display: block;
+    margin-top: 4px;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: var(--luna-font);
+    font-size: 10px;
+    color: #7a1c1c;
+    text-decoration: underline;
+    cursor: pointer;
   }
 
   .status-bar {

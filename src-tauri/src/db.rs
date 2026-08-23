@@ -1,11 +1,64 @@
 use crate::catalog::{CatalogFilter, CatalogGame, DownloadInfo};
 use rusqlite::{Connection, Result, params, params_from_iter};
 use serde::{Deserialize, Serialize};
+use std::collections::HashSet;
 use std::path::Path;
 use std::sync::Mutex;
 
 /// Bump when the schema changes and add a matching arm in `migrate`.
 const SCHEMA_VERSION: i32 = 1;
+
+/// True if `table` already has `column`.
+///
+/// Used instead of catching the ALTER error: SQLite reports a duplicate column
+/// as a plain `SQLITE_ERROR`, indistinguishable by code from a genuine failure,
+/// and matching on the message text is brittle across versions.
+fn column_exists(conn: &Connection, table: &str, column: &str) -> Result<bool> {
+    // PRAGMA does not accept bound parameters for the table name. Every caller
+    // passes a literal from this file, never user input.
+    let mut stmt = conn.prepare(&format!("PRAGMA table_info({table})"))?;
+    let mut rows = stmt.query([])?;
+    while let Some(row) = rows.next()? {
+        let name: String = row.get(1)?;
+        if name == column {
+            return Ok(true);
+        }
+    }
+    Ok(false)
+}
+
+/// Column list shared by every `games` query, so the row mapper below always
+/// matches the indices it reads.
+const GAME_SELECT: &str = "SELECT id, title, year, publisher, platform, engine, source,
+            install_path, cover_path, last_played, playtime_s,
+            catalog_id, runtime, runtime_config
+     FROM games";
+
+fn row_to_game(row: &rusqlite::Row) -> Result<Game> {
+    Ok(Game {
+        id: row.get(0)?,
+        title: row.get(1)?,
+        year: row.get(2)?,
+        publisher: row.get(3)?,
+        platform: row.get(4)?,
+        engine: row.get(5)?,
+        source: row.get(6)?,
+        install_path: row.get(7)?,
+        cover_path: row.get(8)?,
+        last_played: row.get(9)?,
+        playtime_s: row.get(10)?,
+        catalog_id: row.get(11)?,
+        runtime: row.get(12)?,
+        runtime_config: row.get(13)?,
+    })
+}
+
+fn add_column_if_missing(conn: &Connection, table: &str, column: &str, decl: &str) -> Result<()> {
+    if !column_exists(conn, table, column)? {
+        conn.execute(&format!("ALTER TABLE {table} ADD COLUMN {column} {decl}"), [])?;
+    }
+    Ok(())
+}
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Game {
@@ -55,19 +108,14 @@ impl Database {
         let current: i32 = conn.query_row("PRAGMA user_version", [], |r| r.get(0))?;
 
         if current < 1 {
-            // These columns were added alongside the catalog. A fresh database
-            // already has them from init_tables, so tolerate a duplicate-column
-            // error and only fail on anything else.
-            for col in [
-                "ALTER TABLE games ADD COLUMN catalog_id TEXT",
-                "ALTER TABLE games ADD COLUMN runtime TEXT",
-                "ALTER TABLE games ADD COLUMN runtime_config TEXT",
+            // Added alongside the catalog. A fresh database already has these
+            // from init_tables, so each is applied only if absent.
+            for (column, decl) in [
+                ("catalog_id", "TEXT"),
+                ("runtime", "TEXT"),
+                ("runtime_config", "TEXT"),
             ] {
-                match conn.execute(col, []) {
-                    Ok(_) => {}
-                    Err(e) if e.to_string().contains("duplicate column name") => {}
-                    Err(e) => return Err(e),
-                }
+                add_column_if_missing(&conn, "games", column, decl)?;
             }
         }
 
@@ -151,30 +199,8 @@ impl Database {
 
     pub fn list_games(&self) -> Result<Vec<Game>> {
         let conn = self.conn.lock().unwrap();
-        let mut stmt = conn.prepare(
-            "SELECT id, title, year, publisher, platform, engine, source,
-                    install_path, cover_path, last_played, playtime_s,
-                    catalog_id, runtime, runtime_config
-             FROM games ORDER BY title"
-        )?;
-        let rows = stmt.query_map([], |row| {
-            Ok(Game {
-                id: row.get(0)?,
-                title: row.get(1)?,
-                year: row.get(2)?,
-                publisher: row.get(3)?,
-                platform: row.get(4)?,
-                engine: row.get(5)?,
-                source: row.get(6)?,
-                install_path: row.get(7)?,
-                cover_path: row.get(8)?,
-                last_played: row.get(9)?,
-                playtime_s: row.get(10)?,
-                catalog_id: row.get(11)?,
-                runtime: row.get(12)?,
-                runtime_config: row.get(13)?,
-            })
-        })?;
+        let mut stmt = conn.prepare(&format!("{GAME_SELECT} ORDER BY title"))?;
+        let rows = stmt.query_map([], row_to_game)?;
         rows.collect()
     }
 
@@ -198,6 +224,53 @@ impl Database {
         let conn = self.conn.lock().unwrap();
         conn.execute("DELETE FROM games WHERE id = ?1", params![id])?;
         Ok(())
+    }
+
+    pub fn get_game(&self, id: &str) -> Result<Option<Game>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt = conn.prepare(&format!("{GAME_SELECT} WHERE id = ?1"))?;
+        let mut rows = stmt.query_map(params![id], row_to_game)?;
+        rows.next().transpose()
+    }
+
+    /// Finds an installed game by the catalog entry it came from. The pipeline
+    /// uses this to detect a reinstall and reuse the existing row.
+    pub fn get_game_by_catalog_id(&self, catalog_id: &str) -> Result<Option<Game>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt = conn.prepare(&format!("{GAME_SELECT} WHERE catalog_id = ?1"))?;
+        let mut rows = stmt.query_map(params![catalog_id], row_to_game)?;
+        rows.next().transpose()
+    }
+
+    /// Overwrites every mutable field of an existing row.
+    pub fn update_game(&self, game: &Game) -> Result<()> {
+        let conn = self.conn.lock().unwrap();
+        conn.execute(
+            "UPDATE games SET
+                 title = ?2, year = ?3, publisher = ?4, platform = ?5, engine = ?6,
+                 source = ?7, install_path = ?8, cover_path = ?9, last_played = ?10,
+                 playtime_s = ?11, catalog_id = ?12, runtime = ?13, runtime_config = ?14
+             WHERE id = ?1",
+            params![
+                game.id, game.title, game.year, game.publisher, game.platform,
+                game.engine, game.source, game.install_path, game.cover_path,
+                game.last_played, game.playtime_s, game.catalog_id, game.runtime,
+                game.runtime_config
+            ],
+        )?;
+        Ok(())
+    }
+
+    /// The catalog ids the user already has installed, for marking the catalog
+    /// view. One cheap query beats joining per card.
+    pub fn installed_catalog_ids(&self) -> Result<HashSet<String>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt = conn.prepare(
+            "SELECT catalog_id FROM games
+             WHERE catalog_id IS NOT NULL AND install_path IS NOT NULL",
+        )?;
+        let rows = stmt.query_map([], |r| r.get::<_, String>(0))?;
+        rows.collect()
     }
 
     // ---------------------------------------------------------------- catalog
@@ -515,6 +588,64 @@ mod tests {
             db.catalog_meta_get("entry_count").unwrap().unwrap(),
             bundled.games.len().to_string()
         );
+    }
+
+    #[test]
+    fn get_game_finds_by_id_and_catalog_id() {
+        let (db, _dir) = temp_db();
+        let mut g = byo("g1", "Installed");
+        g.catalog_id = Some("doom-shareware".into());
+        g.install_path = Some("C:/games/doom".into());
+        db.add_game(&g).unwrap();
+
+        assert_eq!(db.get_game("g1").unwrap().unwrap().title, "Installed");
+        assert!(db.get_game("nope").unwrap().is_none());
+        assert_eq!(
+            db.get_game_by_catalog_id("doom-shareware").unwrap().unwrap().id,
+            "g1"
+        );
+        assert!(db.get_game_by_catalog_id("not-installed").unwrap().is_none());
+    }
+
+    #[test]
+    fn update_game_overwrites_without_duplicating() {
+        let (db, _dir) = temp_db();
+        db.add_game(&byo("g1", "Before")).unwrap();
+
+        let mut g = db.get_game("g1").unwrap().unwrap();
+        g.title = "After".into();
+        g.install_path = Some("C:/games/x".into());
+        g.playtime_s = 3600;
+        db.update_game(&g).unwrap();
+
+        let all = db.list_games().unwrap();
+        assert_eq!(all.len(), 1, "update must not insert a second row");
+        assert_eq!(all[0].title, "After");
+        assert_eq!(all[0].install_path.as_deref(), Some("C:/games/x"));
+        assert_eq!(all[0].playtime_s, 3600);
+    }
+
+    #[test]
+    fn installed_ids_only_counts_games_on_disk() {
+        let (db, _dir) = temp_db();
+
+        // Installed from the catalog.
+        let mut installed = byo("g1", "Installed");
+        installed.catalog_id = Some("doom-shareware".into());
+        installed.install_path = Some("C:/games/doom".into());
+        db.add_game(&installed).unwrap();
+
+        // From the catalog but with no files yet — must not count.
+        let mut pending = byo("g2", "Pending");
+        pending.catalog_id = Some("tyrian-2000".into());
+        db.add_game(&pending).unwrap();
+
+        // A user's own copy has no catalog id at all.
+        db.add_game(&byo("g3", "My Own")).unwrap();
+
+        let ids = db.installed_catalog_ids().unwrap();
+        assert_eq!(ids.len(), 1);
+        assert!(ids.contains("doom-shareware"));
     }
 
     #[test]

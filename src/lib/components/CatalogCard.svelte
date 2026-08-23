@@ -2,22 +2,56 @@
   import CoverTile from "./CoverTile.svelte";
   import { platformLabel, licenseLabel } from "$lib/format";
   import { isPlayable, type CatalogGame } from "$lib/types";
+  import type { ActiveInstall } from "$lib/downloads.svelte";
 
   interface Props {
     game: CatalogGame;
     selected?: boolean;
+    installed?: boolean;
+    /** Live install state, or null when this game is not being installed. */
+    install?: ActiveInstall | null;
     onclick?: () => void;
   }
 
-  let { game, selected = false, onclick }: Props = $props();
+  let {
+    game,
+    selected = false,
+    installed = false,
+    install = null,
+    onclick,
+  }: Props = $props();
 
   let playable = $derived(isPlayable(game.runtime));
+
+  // null when the server never reported a size, which renders as indeterminate.
+  let fraction = $derived(
+    install?.total ? Math.min(1, install.downloaded / install.total) : null
+  );
+
+  const PHASE_LABEL = {
+    downloading: "Downloading",
+    verifying: "Verifying",
+    extracting: "Extracting",
+  } as const;
 </script>
 
 <button class="catalog-card" class:selected {onclick} type="button">
   <div class="cover-slot">
     <CoverTile title={game.title} src={game.cover_url} />
-    {#if !playable}
+    {#if install}
+      <span class="install-overlay">
+        <span class="install-phase">{PHASE_LABEL[install.phase]}</span>
+        <span class="track">
+          {#if fraction === null}
+            <span class="fill indeterminate"></span>
+          {:else}
+            <span class="fill" style="width: {fraction * 100}%"></span>
+          {/if}
+        </span>
+      </span>
+    {:else if installed}
+      <span class="installed-badge" title="Installed">✓</span>
+    {:else if !playable}
       <span class="unplayable" title="This runtime is not implemented yet">Not yet playable</span>
     {/if}
   </div>
@@ -78,6 +112,64 @@
     font-weight: 600;
     text-align: center;
     padding: 2px 0;
+  }
+
+  .installed-badge {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #2d7a2d;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+
+  .install-overlay {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 3px 4px 4px;
+    background: rgba(0, 0, 0, 0.78);
+  }
+  .install-phase {
+    font-size: 9px;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+  }
+  .track {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.25);
+    overflow: hidden;
+  }
+  .fill {
+    display: block;
+    height: 100%;
+    background: var(--luna-title-start, #0058e6);
+    border-radius: 2px;
+    transition: width 0.2s linear;
+  }
+  /* Verifying and extracting report no byte count, so show motion instead of
+     a misleading position. */
+  .fill.indeterminate {
+    width: 40%;
+    animation: slide 1.1s ease-in-out infinite;
+  }
+  @keyframes slide {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(250%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fill.indeterminate { animation: none; width: 100%; opacity: 0.5; }
   }
 
   .meta {

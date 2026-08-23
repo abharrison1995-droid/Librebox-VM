@@ -23,7 +23,7 @@
         "url": "https://downloads.scummvm.org/frs/extras/Beneath%20a%20Steel%20Sky/bass-cd-1.2.zip",
         "format": "zip",
         "size_bytes": 69377781,
-        "sha256": null
+        "sha256": "53209b9400eab6fd7fa71518b2f357c8de75cfeaa5ba57024575ab79cc974593"
       },
       "runtime_config": {
         "game_id": "sky"
@@ -50,7 +50,7 @@
         "url": "https://archive.org/download/msdos_Bio_Menace_1993/Bio_Menace_1993.zip",
         "format": "zip",
         "size_bytes": 1650382,
-        "sha256": null
+        "sha256": "ca78516e2292a469a7e157de92b731ec6fffd71849ab095e31062b1921d927e2"
       },
       "runtime_config": {
         "executable": "BMENACE1.EXE",
@@ -80,7 +80,7 @@
         "url": "https://archive.org/download/Bs-aog-sw1/bstone.zip",
         "format": "zip",
         "size_bytes": 1378690,
-        "sha256": null
+        "sha256": "74c9cc0aeddfc446d4066a7509be7b93fae13fd677f35c3350008fee37ee6f50"
       },
       "runtime_config": {
         "executable": "BSTONE.EXE",
@@ -110,7 +110,7 @@
         "url": "https://www.cavestory.org/downloads/cavestoryen.zip",
         "format": "zip",
         "size_bytes": 1136575,
-        "sha256": null
+        "sha256": "aa87fa30bee9b4980640c7e104791354e0f1f6411ee0d45a70af70046aa0685f"
       },
       "runtime_config": {
         "executable": "Doukutsu.exe"
@@ -136,7 +136,7 @@
         "url": "https://archive.org/download/msdos_Commander_Keen_1_-_Marooned_on_Mars_1990/Commander_Keen_1_-_Marooned_on_Mars_1990.zip",
         "format": "zip",
         "size_bytes": 212637,
-        "sha256": null
+        "sha256": "e6c304ca1963120aca2b321b06faac355bef097416b92b2b7364e4d9c3b032d7"
       },
       "runtime_config": {
         "executable": "KEEN1.EXE",
@@ -165,7 +165,7 @@
         "url": "https://archive.org/download/msdos_Crystal_Caves_1991/Crystal_Caves_1991.zip",
         "format": "zip",
         "size_bytes": 538510,
-        "sha256": null
+        "sha256": "2ada73c2cfad04d0c95a7a49ed717b54d32ce13e236f711f89e95cd754e617f0"
       },
       "runtime_config": {
         "executable": "CC1.EXE",
@@ -195,7 +195,7 @@
         "url": "https://ddnet.org/downloads/DDNet-19.2-win64.zip",
         "format": "zip",
         "size_bytes": 61582715,
-        "sha256": null
+        "sha256": "afff3637249344c6646925193532adaa02596ee30bbc3c5436bd7183bf0417f2"
       },
       "runtime_config": {
         "executable": "DDNet.exe"
@@ -222,7 +222,7 @@
         "url": "https://archive.org/download/msdos_Descent_1995/Descent_1995.zip",
         "format": "zip",
         "size_bytes": 2982850,
-        "sha256": null
+        "sha256": "0e47005b4825b928f400e1ab81c41882c56b0ecbf80628b746f2c68750e94f07"
       },
       "runtime_config": {
         "executable": "DESCENT.EXE",
@@ -251,7 +251,7 @@
         "url": "https://github.com/diasurgical/DevilutionX/releases/download/1.5.5/devilutionx-windows-x86_64.zip",
         "format": "zip",
         "size_bytes": 10482049,
-        "sha256": null
+        "sha256": "a20cfb62cd611f76aac78f9bf09a28f57794fbfe63ae6da9245deca446680b2b"
       },
       "runtime_config": {
         "executable": "devilutionx.exe"
@@ -278,7 +278,7 @@
         "url": "https://archive.org/download/DoomsharewareEpisode/DoomV1.9sw1995idSoftwareInc.action.zip",
         "format": "zip",
         "size_bytes": 2451850,
-        "sha256": null
+        "sha256": "63ad7609f2e951fb2198f682e1226f003946c75c00b9785fa967ffb12c6745f7"
       },
       "runtime_config": {
         "executable": "DOOM.EXE",
@@ -308,7 +308,7 @@
         "url": "https://downloads.scummvm.org/frs/extras/Drascula_%20The%20Vampire%20Strikes%20Back/drascula-1.0.zip",
         "format": "zip",
         "size_bytes": 32842993,
-        "sha256": null
+        "sha256": "b731f6cb5a22ba8b4c3b3362f570b9a10a67b6cb0b395394b19a94b36e4e42de"
       },
       "runtime_config": {
         "game_id": "drascula"
@@ -335,7 +335,7 @@
         "url": "https://archive.org/download/duke-nukem2-sw/duke2.zip",
         "format": "zip",
         "size_bytes": 1099114,
-        "sha256": null
+        "sha256": "bfdbce313b174d9dd56f5a543696fa5ed6132155aa9d12983605d802aaa2d38d"
       },
       "runtime_config": {
         "executable": "NUKEM2.EXE",
@@ -366,7 +366,7 @@
         "url": "https://github.com/endless-sky/endless-sky/releases/download/v0.11.2/EndlessSky-win64-v0.11.2.zip",
         "format": "zip",
         "size_bytes": 369748978,
-        "sha256": null
+        "sha256": "28c7069175923b345308b1bc74b1a853b5bdc9e125888f6d38f33fc2c500a4f7"
       },
       "runtime_config": {
         "executable": "EndlessSky.exe"
@@ -392,7 +392,7 @@
         "url": "https://archive.org/download/msdos_Epic_Pinball_1993/Epic_Pinball_1993.zip",
         "format": "zip",
         "size_bytes": 7737949,
-        "sha256": null
+        "sha256": "de8247757f9a811bcc58dcd5e4855d0350b1b05c8cc1876fc503ad089294be3e"
       },
       "runtime_config": {
         "executable": "PINBALL.EXE",
@@ -422,7 +422,7 @@
         "url": "https://downloads.scummvm.org/frs/extras/Flight%20of%20the%20Amazon%20Queen/FOTAQ_Talkie-1.1.zip",
         "format": "zip",
         "size_bytes": 33744817,
-        "sha256": null
+        "sha256": "a25cdd5e003a0a5e402af99b218cc7ea81ad032cb36b8c05df3bd1167038d8a8"
       },
       "runtime_config": {
         "game_id": "queen"
@@ -449,7 +449,7 @@
         "url": "https://github.com/freedoom/freedoom/releases/download/v0.13.0/freedoom-0.13.0.zip",
         "format": "zip",
         "size_bytes": 24143781,
-        "sha256": null
+        "sha256": "3f9b264f3e3ce503b4fb7f6bdcb1f419d93c7b546f4df3e874dd878db9688f59"
       },
       "runtime_config": {}
     },
@@ -474,7 +474,7 @@
         "url": "https://archive.org/download/msdos_Heretic_1994/Heretic_1994.zip",
         "format": "zip",
         "size_bytes": 11324941,
-        "sha256": null
+        "sha256": "5eb01cc55d5d0a811d8480738fd6b1606d453849709c86a43e4a1a071504793e"
       },
       "runtime_config": {
         "executable": "HERETIC.EXE",
@@ -503,7 +503,7 @@
         "url": "https://archive.org/download/msdos_Hocus_Pocus_1994/Hocus_Pocus_1994.zip",
         "format": "zip",
         "size_bytes": 2718854,
-        "sha256": null
+        "sha256": "c26f3597a412761297792474ac9dbdf4db70d0e059cfecee544e2de3cabbf78e"
       },
       "runtime_config": {
         "executable": "HOCUS.EXE",
@@ -532,7 +532,7 @@
         "url": "https://archive.org/download/msdos_Jazz_Jackrabbit_1994/Jazz_Jackrabbit_1994.zip",
         "format": "zip",
         "size_bytes": 5716811,
-        "sha256": null
+        "sha256": "1912b780dd7d0fab2d05e2e1b69e9c390aa262e7dee8fbe732a444379093d2ba"
       },
       "runtime_config": {
         "executable": "JAZZ.EXE",
@@ -561,7 +561,7 @@
         "url": "https://archive.org/download/CommanderKeenKeenDreams/CommanderKeenInKeenDreamsV1.13Egasw1992softdiskPublishingaction.ZIP",
         "format": "zip",
         "size_bytes": 359707,
-        "sha256": null
+        "sha256": "cb040e4466950964ac2d494d5e5e551b6aa7b1d5381d49c41b0e95b130130c69"
       },
       "runtime_config": {
         "executable": "KDREAMS.EXE",
@@ -591,7 +591,7 @@
         "url": "https://downloads.scummvm.org/frs/extras/Lure%20of%20the%20Temptress/lure-1.1.zip",
         "format": "zip",
         "size_bytes": 5678861,
-        "sha256": null
+        "sha256": "f3178245a1483da1168c3a11e70b65d33c389f1f5df63d4f3a356886c1890108"
       },
       "runtime_config": {
         "game_id": "lure"
@@ -618,7 +618,7 @@
         "url": "https://archive.org/download/msdos_Major_Stryker_1993/Major_Stryker_1993.zip",
         "format": "zip",
         "size_bytes": 2571359,
-        "sha256": null
+        "sha256": "3056c21f428f124e3f2f8b7bf5cb845428b31357b42b3e8dc3bc4c95e71b8588"
       },
       "runtime_config": {
         "executable": "STRYKER.EXE",
@@ -647,7 +647,7 @@
         "url": "https://archive.org/download/monster-bash1-sw/bash.zip",
         "format": "zip",
         "size_bytes": 990586,
-        "sha256": null
+        "sha256": "6b7da6b34eb98c6b7744bba0cab88b8dfd7d8b1612c145ab02b5cc6866d128c7"
       },
       "runtime_config": {
         "executable": "BASH.EXE",
@@ -676,7 +676,7 @@
         "url": "https://archive.org/download/msdos_One_Must_Fall_2097_1994/One_Must_Fall_2097_1994.zip",
         "format": "zip",
         "size_bytes": 13923269,
-        "sha256": null
+        "sha256": "7e664e6b7dab8df93bf79f881856ffbfa04a4e7c49cf570b57b04d377e2022a0"
       },
       "runtime_config": {
         "executable": "FILE0001.EXE",
@@ -706,7 +706,7 @@
         "url": "https://github.com/OpenRA/OpenRA/releases/download/release-20250330/OpenRA-release-20250330-x64-winportable.zip",
         "format": "zip",
         "size_bytes": 73079233,
-        "sha256": null
+        "sha256": "880d46098dbdafaabf26a1c2411f23d60abe0a5c78f5b9eaf23c1e45ce6cb6fc"
       },
       "runtime_config": {
         "executable": "RedAlert.exe"
@@ -733,7 +733,7 @@
         "url": "https://cdn.openttd.org/openttd-releases/14.1/openttd-14.1-windows-win64.zip",
         "format": "zip",
         "size_bytes": 10162663,
-        "sha256": null
+        "sha256": "3db67e93afbf6cb46db0c1f0ec364fb28abb12ee867202b2c86775cf6a9eebf0"
       },
       "runtime_config": {
         "executable": "openttd.exe"
@@ -760,7 +760,7 @@
         "url": "https://archive.org/download/Raptor-sw1/raptor.zip",
         "format": "zip",
         "size_bytes": 1890661,
-        "sha256": null
+        "sha256": "7efac1f87da66fb4d2e010a332b662c18773e58e077e83543f441023bfb10202"
       },
       "runtime_config": {
         "executable": "RAPTOR.EXE",
@@ -790,7 +790,7 @@
         "url": "https://archive.org/download/msdos_Rise_of_the_Triad_-_The_Hunt_Begins_Deluxe_Edition_1995/Rise_of_the_Triad_-_The_Hunt_Begins_Deluxe_Edition_1995.zip",
         "format": "zip",
         "size_bytes": 20685288,
-        "sha256": null
+        "sha256": "62304298ee15874acb664b88fe97fbcdf68e92c11f5e6d50e18cb624d5f6cb16"
       },
       "runtime_config": {
         "executable": "ROTT.EXE",
@@ -820,7 +820,7 @@
         "url": "https://archive.org/download/msdos_Secret_Agent_1992/Secret_Agent_1992.zip",
         "format": "zip",
         "size_bytes": 585819,
-        "sha256": null
+        "sha256": "5797642aa4e530b42569a3b42c590341adea5ed197469a4485c821e1824129f1"
       },
       "runtime_config": {
         "executable": "SA1.EXE",
@@ -850,7 +850,7 @@
         "url": "https://downloads.scummvm.org/frs/extras/Soltys/soltys-en-v1.0.zip",
         "format": "zip",
         "size_bytes": 3484518,
-        "sha256": null
+        "sha256": "87b89e654b8a5b8ebe342cb4c5c6049ab9a43a5efb474d9c49bafb77dcce48f6"
       },
       "runtime_config": {
         "game_id": "soltys"
@@ -876,7 +876,7 @@
         "url": "https://github.com/SuperTux/supertux/releases/download/v0.7.0/SuperTux-v0.7.0-win64-portable.zip",
         "format": "zip",
         "size_bytes": 308538500,
-        "sha256": null
+        "sha256": "d637f79e8a77fc4d42982cfea40f74f812d5050b9d6d53309b287dae734e1970"
       },
       "runtime_config": {
         "executable": "supertux2.exe"
@@ -902,7 +902,7 @@
         "url": "https://github.com/supertuxkart/stk-code/releases/download/1.5/SuperTuxKart-1.5-win.zip",
         "format": "zip",
         "size_bytes": 922430727,
-        "sha256": null
+        "sha256": "9df7e2d67e8562127a3bb633030f1bd4ee77fa9e7f0ae110897473025af8acdc"
       },
       "runtime_config": {
         "executable": "supertuxkart.exe"
@@ -929,7 +929,7 @@
         "url": "https://archive.org/download/msdos_Terminal_Velocity_1995/Terminal_Velocity_1995.zip",
         "format": "zip",
         "size_bytes": 135391472,
-        "sha256": null
+        "sha256": "eb95020556797166373be506bc7a74fa5d29bedfb419600de8f725b1252ff953"
       },
       "runtime_config": {
         "executable": "TV.EXE",
@@ -959,7 +959,7 @@
         "url": "https://sourceforge.net/projects/wesnoth/files/wesnoth-1.18/wesnoth-1.18.2/wesnoth-1.18.2-win64.exe/download",
         "format": "exe",
         "size_bytes": 434223085,
-        "sha256": null
+        "sha256": "3a83338eb85c9b9d6e7985c1c0bb9fdf59594fe04c72e261c4290ce9f586e0f6"
       },
       "runtime_config": {
         "executable": "wesnoth.exe"
@@ -986,7 +986,7 @@
         "url": "https://downloads.sourceforge.net/project/sc2/UQM/0.8/uqm-0.8-win32.exe",
         "format": "exe",
         "size_bytes": 2274513,
-        "sha256": null
+        "sha256": "ac32d9b2e2ea4e7578aef58fafd3daba105cf96230da7430ebfaca4f13b9bc5a"
       },
       "runtime_config": {
         "executable": "uqm.exe"
@@ -1013,7 +1013,7 @@
         "url": "https://archive.org/download/msdos_Tyrian_2000_1999/Tyrian_2000_1999.zip",
         "format": "zip",
         "size_bytes": 5772456,
-        "sha256": null
+        "sha256": "54500787828880e2c6316b4e701876ba02aba0cc319fd499ec07b16fa7580abf"
       },
       "runtime_config": {
         "executable": "TYRIAN2K.EXE",
@@ -1043,7 +1043,7 @@
         "url": "https://github.com/Warzone2100/warzone2100/releases/download/4.7.0/warzone2100_win_x64_archive.zip",
         "format": "zip",
         "size_bytes": 392936210,
-        "sha256": null
+        "sha256": "2deed0a8cfe30a188681f1fea11d75fdcdef30075254b1cd90799868ce1c6104"
       },
       "runtime_config": {
         "executable": "warzone2100.exe"
@@ -1070,7 +1070,7 @@
         "url": "https://github.com/widelands/widelands/releases/download/v1.3.1/Widelands-1.3.1-x64.exe",
         "format": "exe",
         "size_bytes": 458701881,
-        "sha256": null
+        "sha256": "c8f335006c2900ef4943f91f5d51ea35d048a08d741631e518c5f42323aa68c6"
       },
       "runtime_config": {
         "executable": "widelands.exe"
@@ -1097,7 +1097,7 @@
         "url": "https://archive.org/download/Wolfenstein3d/Wolfenstein3dV14sw.ZIP",
         "format": "zip",
         "size_bytes": 669022,
-        "sha256": null
+        "sha256": "0e7a7275ff910af104f6050926b51dbeeea89fa03afbd4c5019c0e7153dd42f7"
       },
       "runtime_config": {
         "executable": "WOLF3D.EXE",
@@ -1127,7 +1127,7 @@
         "url": "https://dl.xonotic.org/xonotic-0.8.6.zip",
         "format": "zip",
         "size_bytes": 1238439495,
-        "sha256": null
+        "sha256": "50850f8d800e7499722f6ea61e478e96464a375494b5a24da93aa0598cbe964d"
       },
       "runtime_config": {
         "executable": "xonotic.exe"

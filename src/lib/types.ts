@@ -66,6 +66,37 @@ export interface CatalogStatus {
   entry_count: number;
 }
 
+export type InstallPhase = "downloading" | "verifying" | "extracting";
+
+/** Payload of the `install:progress` event. */
+export interface InstallProgress {
+  catalog_id: string;
+  phase: InstallPhase;
+  downloaded: number;
+  total: number | null;
+}
+
+export interface InstallDone {
+  catalog_id: string;
+  game_id: string;
+}
+
+export interface InstallFailed {
+  catalog_id: string;
+  error: string;
+}
+
+/** Formats the install pipeline can unpack. Anything else needs manual setup. */
+export const INSTALLABLE_FORMATS = ["zip"] as const;
+
+export function isInstallable(game: CatalogGame): boolean {
+  return (
+    isPlayable(game.runtime) &&
+    !!game.download.format &&
+    (INSTALLABLE_FORMATS as readonly string[]).includes(game.download.format)
+  );
+}
+
 export type Runtime = "dosbox" | "scummvm" | "native" | "86box";
 export type License = "freeware" | "shareware" | "open-source" | "public-domain";
 

@@ -3,12 +3,14 @@
   import GameCard from "$lib/components/GameCard.svelte";
   import CoverTile from "$lib/components/CoverTile.svelte";
   import { platformLabel, formatPlaytime, sourceLabel } from "$lib/format";
+  import { downloads } from "$lib/downloads.svelte";
   import type { Game } from "$lib/types";
 
   let games = $state<Game[]>([]);
   let selectedId = $state<string | null>(null);
   let loading = $state(true);
   let viewMode = $state<"grid" | "list">("grid");
+  let busy = $state(false);
 
   async function loadGames() {
     try {
@@ -20,11 +22,28 @@
     }
   }
 
+  // Reading the installed set makes this re-run when an install completes, so
+  // a game downloaded on the Catalog tab shows up here without a manual refresh.
   $effect(() => {
+    downloads.installed;
     loadGames();
   });
 
   let selectedGame = $derived(games.find((g) => g.id === selectedId) ?? null);
+
+  async function uninstall(game: Game) {
+    busy = true;
+    try {
+      await invoke("uninstall_game", { id: game.id });
+      selectedId = null;
+      await downloads.refreshInstalled();
+      await loadGames();
+    } catch (e) {
+      console.error("Failed to uninstall:", e);
+    } finally {
+      busy = false;
+    }
+  }
 </script>
 
 <div class="library-page">
@@ -156,12 +175,21 @@
             <span class="meta-value">{sourceLabel(selectedGame.source)}</span>
           </div>
         </div>
-        <button class="launch-btn xp-button">
+        <button class="launch-btn xp-button" disabled title="Launching is not implemented yet">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path d="M2 1L10 6L2 11V1Z" fill="var(--luna-start-bg)"/>
           </svg>
           Launch Game
         </button>
+        {#if selectedGame.install_path}
+          <button
+            class="xp-button uninstall-btn"
+            disabled={busy}
+            onclick={() => uninstall(selectedGame!)}
+          >
+            {busy ? "Removing…" : "Uninstall"}
+          </button>
+        {/if}
       </aside>
     {/if}
   </div>
@@ -369,5 +397,11 @@
     font-size: 13px;
     font-weight: 600;
     margin-top: 4px;
+  }
+  .uninstall-btn {
+    width: 100%;
+    padding: 4px 16px;
+    font-size: 11px;
+    margin-top: 6px;
   }
 </style>

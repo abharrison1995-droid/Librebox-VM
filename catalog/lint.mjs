@@ -127,8 +127,10 @@ for (const [i, game] of catalog.games.entries()) {
     if (dl.sha256 != null && !/^[a-f0-9]{64}$/.test(dl.sha256)) {
       err(id, "download.sha256 must be 64 lowercase hex chars");
     }
+    // The install pipeline verifies against this, so it is no longer optional.
+    // Populate with `npm run hash:catalog`.
     if (dl.sha256 == null) {
-      warn(id, "no sha256 recorded (required before the download pipeline ships)");
+      err(id, "no sha256 recorded — run `npm run hash:catalog`");
     }
   } else if (game.download !== undefined) {
     err(id, "download must be an object");
