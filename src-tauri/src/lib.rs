@@ -48,6 +48,27 @@ fn list_games(state: tauri::State<AppState>) -> Result<Vec<Game>, String> {
     state.db.list_games().map_err(|e| e.to_string())
 }
 
+/// Builds the `runtime_config` for a game the user already owns, resolving the
+/// program they named inside the folder they picked.
+///
+/// Uses the same resolution as an installed game, so "the exe is in a
+/// subfolder" works identically whether the files came from the catalog or
+/// from the user's own disk.
+fn byo_runtime_config(dir: &Path, executable: &str) -> Result<String, String> {
+    let found = download::resolve_executable(dir, executable)
+        .ok_or_else(|| format!("could not find {executable} anywhere in that folder"))?;
+    serde_json::to_string(&serde_json::json!({
+        "executable": executable,
+        "executable_path": found.to_string_lossy().replace('\\', "/"),
+    }))
+    .map_err(|e| e.to_string())
+}
+
+/// Adds a game the user already owns.
+///
+/// When a folder and executable are supplied the executable is resolved inside
+/// that folder — the same way an installed game's is — so a game added this way
+/// is launchable rather than just catalogued.
 #[tauri::command]
 fn add_game(
     state: tauri::State<AppState>,
@@ -55,22 +76,49 @@ fn add_game(
     platform: String,
     year: Option<i32>,
     publisher: Option<String>,
+    install_path: Option<String>,
+    runtime: Option<String>,
+    executable: Option<String>,
 ) -> Result<Game, String> {
+    let title = title.trim().to_string();
+    if title.is_empty() {
+        return Err("a title is required".into());
+    }
+
+    let mut runtime_config = None;
+    let install_path = match install_path.as_deref().map(str::trim).filter(|p| !p.is_empty()) {
+        None => None,
+        Some(path) => {
+            let dir = Path::new(path);
+            if !dir.is_dir() {
+                return Err("that folder does not exist".into());
+            }
+            if let Some(exe) = executable.as_deref().map(str::trim).filter(|e| !e.is_empty()) {
+                runtime_config = Some(byo_runtime_config(dir, exe)?);
+            }
+            Some(path.to_string())
+        }
+    };
+
+    // A runtime without a resolved executable could never launch, so do not
+    // record one; the game is still catalogued.
+    let runtime = runtime.filter(|_| runtime_config.is_some());
+
     let game = Game {
         id: uuid::Uuid::new_v4().to_string(),
         title,
         year,
-        publisher,
+        publisher: publisher.filter(|p| !p.trim().is_empty()),
         platform,
         engine: None,
         source: "byo".to_string(),
-        install_path: None,
+        install_path,
         cover_path: None,
         last_played: None,
         playtime_s: 0,
         catalog_id: None,
-        runtime: None,
-        runtime_config: None,
+        runtime,
+        runtime_config,
     };
     state.db.add_game(&game).map_err(|e| e.to_string())?;
     Ok(game)
@@ -616,16 +664,32 @@ fn uninstall_game(
 
 // ---------------------------------------------------------------------- setup
 
-/// Clears scratch directories left behind by a crash or a kill mid-install.
+/// Clears scratch left behind by a crash or a kill mid-install.
 /// Only `downloads/` and `staging/` are swept; `games/` holds real installs.
+///
+/// Removes the *contents* rather than the directories themselves: on Windows a
+/// directory that was recently in use is often still held by the indexer or a
+/// virus scanner, and `remove_dir_all` on it fails with a sharing violation
+/// even when it is empty. Deleting per entry is also more precise — we only
+/// ever want to clear scratch, not remove the folders.
 fn sweep_scratch(app: &AppHandle) {
-    if let Ok(root) = app.path().app_data_dir() {
-        for dir in ["downloads", "staging"] {
-            let path = root.join(dir);
-            if path.exists() {
-                if let Err(e) = std::fs::remove_dir_all(&path) {
-                    eprintln!("startup: could not clear {dir}: {e}");
-                }
+    let Ok(root) = app.path().app_data_dir() else {
+        return;
+    };
+    for dir in ["downloads", "staging"] {
+        let path = root.join(dir);
+        let Ok(entries) = std::fs::read_dir(&path) else {
+            continue; // not created yet, which is the common case
+        };
+        for entry in entries.flatten() {
+            let target = entry.path();
+            let result = if target.is_dir() {
+                std::fs::remove_dir_all(&target)
+            } else {
+                std::fs::remove_file(&target)
+            };
+            if let Err(e) = result {
+                eprintln!("startup: could not clear {}: {e}", target.display());
             }
         }
     }
@@ -647,6 +711,40 @@ mod tests {
             },
         );
         Mutex::new(m)
+    }
+
+    #[test]
+    fn byo_config_resolves_an_executable_at_the_root() {
+        let dir = tempfile::tempdir().unwrap();
+        std::fs::write(dir.path().join("GAME.EXE"), b"").unwrap();
+
+        let json = byo_runtime_config(dir.path(), "GAME.EXE").unwrap();
+        let v: serde_json::Value = serde_json::from_str(&json).unwrap();
+        assert_eq!(v["executable"], "GAME.EXE");
+        assert_eq!(v["executable_path"], "GAME.EXE");
+    }
+
+    #[test]
+    fn byo_config_finds_an_executable_in_a_subfolder() {
+        // The common case for a game copied off an old drive.
+        let dir = tempfile::tempdir().unwrap();
+        let sub = dir.path().join("GAME");
+        std::fs::create_dir_all(&sub).unwrap();
+        std::fs::write(sub.join("game.exe"), b"").unwrap();
+
+        let json = byo_runtime_config(dir.path(), "GAME.EXE").unwrap();
+        let v: serde_json::Value = serde_json::from_str(&json).unwrap();
+        // Forward slashes so the stored path matches what the catalog uses.
+        assert_eq!(v["executable_path"], "GAME/game.exe");
+    }
+
+    #[test]
+    fn byo_config_reports_a_missing_executable_by_name() {
+        let dir = tempfile::tempdir().unwrap();
+        std::fs::write(dir.path().join("README.TXT"), b"").unwrap();
+
+        let err = byo_runtime_config(dir.path(), "GAME.EXE").unwrap_err();
+        assert!(err.contains("GAME.EXE"), "the error must name what we looked for: {err}");
     }
 
     /// The complete install flow against a real catalog entry, including
@@ -787,7 +885,18 @@ mod tests {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        // Must be registered first. Two instances would race over one SQLite
+        // file, and the startup sweep below would delete the other's in-flight
+        // downloads, so focus the existing window instead of opening a second.
+        .plugin(tauri_plugin_single_instance::init(|app, _argv, _cwd| {
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.unminimize();
+                let _ = window.set_focus();
+            }
+        }))
         .plugin(tauri_plugin_opener::init())
+        // Folder picking for adding a game you already own.
+        .plugin(tauri_plugin_dialog::init())
         .setup(|app| {
             let data_dir = app.path().app_data_dir()?;
             let db_path = data_dir.join("librebox.db");

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>Librebox</title>
+  <defs>
+    <!-- Luna-era blue, the same family as the app chrome. -->
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a9bff"/>
+      <stop offset="0.5" stop-color="#0058e6"/>
+      <stop offset="1" stop-color="#003fa8"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#1a1d2b"/>
+      <stop offset="1" stop-color="#0a0c14"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.30"/>
+      <stop offset="0.55" stop-color="#ffffff" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <!-- CRT scanlines. Fine enough to vanish at small sizes rather than
+         turning into moiré. -->
+    <pattern id="scan" width="4" height="8" patternUnits="userSpaceOnUse">
+      <rect width="4" height="4" fill="#ffffff" opacity="0.05"/>
+    </pattern>
+  </defs>
+
+  <!-- The box. -->
+  <rect x="40" y="40" width="432" height="432" rx="86" fill="url(#body)"/>
+  <rect x="40" y="40" width="432" height="432" rx="86" fill="url(#glass)"/>
+
+  <!-- The screen. -->
+  <rect x="98" y="120" width="316" height="238" rx="26" fill="url(#screen)"/>
+  <rect x="98" y="120" width="316" height="238" rx="26" fill="url(#scan)"/>
+
+  <!-- The one detail that must survive 16px, so a single solid shape rather
+       than pixel blocks, which turn to mush once they are a few px each. -->
+  <path d="M212 168 L326 239 L212 310 Z"
+        fill="#7ee081" stroke="#7ee081" stroke-width="18" stroke-linejoin="round"/>
+
+  <!-- Monitor foot, so it reads as a machine and not just a rounded square. -->
+  <rect x="228" y="358" width="56" height="34" fill="#00307e"/>
+  <rect x="166" y="386" width="180" height="30" rx="15" fill="#00285f"/>
+</svg>

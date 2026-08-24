@@ -262,7 +262,12 @@
     {#if selectedGame}
       <aside class="detail-panel xp-panel">
         <div class="detail-cover">
-          <CoverTile title={selectedGame.title} src={selectedGame.cover_url} letterSize={56} />
+          <CoverTile
+            title={selectedGame.title}
+            src={selectedGame.cover_url}
+            runtime={selectedGame.runtime}
+            letterSize={56}
+          />
         </div>
         <h2 class="detail-title">{selectedGame.title}</h2>
 

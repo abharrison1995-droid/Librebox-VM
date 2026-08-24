@@ -6,13 +6,17 @@
     title: string;
     year?: number | null;
     platform: string;
+    runtime?: string | null;
     coverPath?: string | null;
     selected?: boolean;
     ondblclick?: () => void;
     onclick?: () => void;
   }
 
-  let { title, year, platform, coverPath, selected = false, ondblclick, onclick }: Props = $props();
+  let {
+    title, year, platform, runtime, coverPath,
+    selected = false, ondblclick, onclick,
+  }: Props = $props();
 </script>
 
 <button
@@ -23,7 +27,7 @@
   type="button"
 >
   <div class="cover-slot">
-    <CoverTile {title} src={coverPath} />
+    <CoverTile {title} {runtime} src={coverPath} />
   </div>
   <div class="meta">
     <span class="title">{title}</span>

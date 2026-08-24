@@ -28,6 +28,12 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "publisher": "Librebox",
+    "copyright": "Librebox contributors. MIT licensed.",
+    "category": "Game",
+    "shortDescription": "Retro PC gaming launcher",
+    "longDescription": "A retro PC gaming launcher with a curated catalog of freeware, open-source and publisher-released shareware classics. Installs and launches them through DOSBox, ScummVM, or directly.",
+    "licenseFile": "../LICENSE",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
