@@ -4,38 +4,60 @@ A retro PC gaming launcher with a curated catalog of games that are genuinely
 free to download — freeware, open source, and publisher-released shareware.
 Wrapped in a Windows XP Luna interface, because that is the era.
 
-> **Status: early development.** The catalog and library browser work. Actually
-> downloading and launching games does not yet — see the [Roadmap](#roadmap).
+> **Status: pre-release.** Browsing, installing, and launching all work. It has
+> not been packaged or tested outside development yet — see the
+> [Roadmap](#roadmap).
 
 ## What works today
 
 - **Curated catalog** — 40 hand-verified titles: DOOM, Wolfenstein 3D,
   Commander Keen, Tyrian 2000, Beneath a Steel Sky, OpenTTD, Cave Story and
-  more. Every download URL is checked by CI-able tooling before it ships.
+  more. Every download URL is checked in CI before it ships.
+- **One-click install** — streams the archive with progress, verifies it against
+  a SHA-256 recorded in the catalog, and unpacks it. A failed or cancelled
+  install leaves nothing behind.
+- **Launching** — DOSBox Staging for DOS games, ScummVM for the adventures, and
+  direct execution for native ports. The emulator is fetched automatically the
+  first time you need it; there is nothing to install by hand.
+- **Playtime tracking** — recorded when a game exits, along with last-played.
+- **Bring your own games** — point Librebox at a folder you already have and it
+  finds the program and launches it alongside everything else.
 - **Browse and filter** — search by title, developer or publisher, and filter
   by platform, runtime, or licence.
 - **Licence transparency** — every entry states what makes it free and links to
   a page corroborating that. See [`catalog/README.md`](catalog/README.md).
 - **Offline-capable** — the catalog is fetched at launch and cached locally, with
   a copy bundled into the app so it works on a fresh install with no network.
-- **Library** — tracks the games you own, kept strictly separate from the
-  catalog so refreshing one never disturbs the other.
-- **XP Luna interface** — custom title bar, taskbar, and tabbed navigation.
+- **XP Luna interface** — custom title bar, tabbed navigation, and a taskbar that
+  shows running games and active downloads.
 
 ## Roadmap
 
 In rough order:
 
-1. **Downloads and installs** — fetch, checksum-verify, and extract catalog
-   entries to disk with progress reporting.
-2. **Launching** — DOSBox-Staging and ScummVM integration, plus direct execution
-   for native games. Playtime and last-played tracking.
+1. **Packaging** — a signed installer, and a first run verified on a machine
+   that is not a development box.
+2. **Content Security Policy** — `tauri.conf.json` still ships `"csp": null`.
+   Turning it on needs checking against the built SvelteKit output and the
+   remote cover images the catalog can reference.
 3. **Per-game troubleshooting profiles** — the practical version of "drivers on
-   demand": per-title sound card, CPU cycle, and aspect-ratio overrides, so a
-   game that runs silently or at ludicrous speed can be fixed from the UI.
-4. **VM sandbox (before 1.0)** — 86Box integration for Win9x-era titles, with
+   demand": per-title sound card, CPU cycle, and aspect-ratio overrides editable
+   from the UI, so a game that runs silently or at ludicrous speed can be fixed
+   without hand-editing a config.
+4. **Settings** — choosing where games install.
+5. **Cover art** — the catalog supports a `cover_url` per entry; until one is
+   supplied a cover is generated from the title. Box art is copyrighted
+   independently of whether a game is freely redistributable, so only clearly
+   licensed images will be added.
+6. **VM sandbox (before 1.0)** — 86Box integration for Win9x-era titles, with
    guest driver management. The catalog schema already carries an `86box`
    runtime; such entries display as "Not yet playable" until this lands.
+
+## Installers that need a hand
+
+Three catalog entries (Battle for Wesnoth, Widelands, The Ur-Quan Masters) ship
+as installer executables rather than archives, so they cannot be set up
+automatically. They stay listed and say so.
 
 ## Technology
 
@@ -62,7 +84,10 @@ Other useful commands:
 | `npm run check` | TypeScript and Svelte type checking |
 | `npm run lint:catalog` | Validate `catalog.json` structure |
 | `npm run lint:catalog:urls` | Also verify every download URL still resolves |
-| `cargo test` (in `src-tauri/`) | Rust unit and integration tests |
+| `npm run hash:catalog` | Backfill missing SHA-256 hashes |
+| `npm run build:site` | Build the public catalog page into `_site/` |
+| `cargo test` (in `src-tauri/`) | Rust tests |
+| `cargo test -- --ignored` | Also run the network tests that really install a game |
 
 The catalog URL can be overridden at build time with `LIBREBOX_CATALOG_URL`.
 
@@ -84,5 +109,6 @@ See [`catalog/README.md`](catalog/README.md#takedown).
 
 ## Licence
 
-MIT — see [`package.json`](package.json). This covers the Librebox application
-only. Catalogued games remain under their own respective licences.
+MIT — see [`LICENSE`](LICENSE). This covers the Librebox application only.
+Catalogued games remain under their own licences, and the emulators Librebox
+downloads (DOSBox Staging, ScummVM) are GPL-licensed by their own projects.

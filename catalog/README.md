@@ -56,6 +56,38 @@ yet, so the app shows them as "Not yet playable".
 { "executable": "openttd.exe" }
 ```
 
+## Runtimes
+
+`catalog.json` also carries a `runtimes` object describing the emulators
+Librebox fetches on demand:
+
+```jsonc
+"runtimes": {
+  "dosbox": {
+    "id": "dosbox",                 // must match the key
+    "name": "DOSBox Staging",
+    "version": "0.82.2",            // installed into a versioned directory
+    "executable": "dosbox.exe",     // found recursively after extraction
+    "source_url": "https://www.dosbox-staging.org/",
+    "license_note": "GPL-2.0-or-later. Distributed unmodified.",
+    "download": { "url": "…", "format": "zip", "size_bytes": 9868315, "sha256": "…" }
+  }
+}
+```
+
+These are downloaded, verified and unpacked by exactly the same pipeline as
+games, so the rules are the same — and stricter in one respect: **a runtime must
+be a `zip`**, because a runtime the user cannot install automatically defeats
+the purpose.
+
+Describing them here rather than hardcoding them means bumping DOSBox is a
+catalog change, not an app release. The linter checks that every runtime a game
+declares is actually provided; a game whose runtime is missing could never be
+launched.
+
+Link only to a project's own release infrastructure, and distribute builds
+unmodified.
+
 ## Validating
 
 ```bash

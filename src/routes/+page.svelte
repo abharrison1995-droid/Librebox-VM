@@ -2,6 +2,7 @@
   import { invoke } from "@tauri-apps/api/core";
   import GameCard from "$lib/components/GameCard.svelte";
   import CoverTile from "$lib/components/CoverTile.svelte";
+  import AddGameDialog from "$lib/components/AddGameDialog.svelte";
   import { platformLabel, formatPlaytime, sourceLabel } from "$lib/format";
   import { downloads } from "$lib/downloads.svelte";
   import { launcher } from "$lib/launcher.svelte";
@@ -12,6 +13,7 @@
   let loading = $state(true);
   let viewMode = $state<"grid" | "list">("grid");
   let busy = $state(false);
+  let showAdd = $state(false);
 
   async function loadGames() {
     try {
@@ -56,6 +58,9 @@
       <span class="toolbar-count">{games.length} title{games.length !== 1 ? 's' : ''}</span>
     </div>
     <div class="toolbar-right">
+      <button class="xp-button add-btn" onclick={() => (showAdd = true)}>
+        + Add Game
+      </button>
       <div class="view-toggle">
         <button
           class="toggle-btn"
@@ -103,7 +108,8 @@
           </div>
           <p class="empty-title">Your library is empty</p>
           <p class="empty-hint">
-            Browse the <a href="/catalog">free catalog</a> to get started.
+            Browse the <a href="/catalog">free catalog</a>, or
+            <button class="link" onclick={() => (showAdd = true)}>add a game you own</button>.
           </p>
         </div>
       {:else if viewMode === "grid"}
@@ -113,6 +119,7 @@
               title={game.title}
               year={game.year}
               platform={game.platform}
+              runtime={game.runtime}
               coverPath={game.cover_path}
               selected={selectedId === game.id}
               onclick={() => selectedId = game.id}
@@ -148,7 +155,12 @@
     {#if selectedGame}
       <aside class="detail-panel">
         <div class="detail-cover">
-          <CoverTile title={selectedGame.title} src={selectedGame.cover_path} letterSize={56} />
+          <CoverTile
+            title={selectedGame.title}
+            src={selectedGame.cover_path}
+            runtime={selectedGame.runtime}
+            letterSize={56}
+          />
         </div>
         <h2 class="detail-title">{selectedGame.title}</h2>
         <div class="detail-meta">
@@ -181,6 +193,10 @@
           <button class="launch-btn xp-button" disabled title="This game has no files on disk">
             Not installed
           </button>
+        {:else if !selectedGame.runtime_config}
+          <!-- Added with a folder but no program name, so there is nothing to run. -->
+          <button class="launch-btn xp-button" disabled>No program set</button>
+          <p class="launch-hint">Re-add this game with a program name to launch it.</p>
         {:else if launcher.isRunning(selectedGame.id)}
           <button class="launch-btn xp-button" disabled>Running…</button>
           <p class="launch-hint">Close the game window to return.</p>
@@ -221,13 +237,24 @@
             disabled={busy || launcher.isRunning(selectedGame.id)}
             onclick={() => uninstall(selectedGame!)}
           >
-            {busy ? "Removing…" : "Uninstall"}
+            {busy ? "Removing…" : selectedGame.source === "byo" ? "Remove from Library" : "Uninstall"}
           </button>
         {/if}
       </aside>
     {/if}
   </div>
 </div>
+
+{#if showAdd}
+  <AddGameDialog
+    onclose={() => (showAdd = false)}
+    onadded={(game) => {
+      showAdd = false;
+      selectedId = game.id;
+      loadGames();
+    }}
+  />
+{/if}
 
 <style>
   .library-page {
@@ -431,6 +458,20 @@
     font-size: 13px;
     font-weight: 600;
     margin-top: 4px;
+  }
+  .add-btn {
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .link {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: #0645ad;
+    text-decoration: underline;
+    cursor: pointer;
   }
   .uninstall-btn {
     width: 100%;
