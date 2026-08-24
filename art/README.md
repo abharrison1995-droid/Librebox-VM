@@ -51,6 +51,21 @@ however they are redrawn. Both were dropped rather than shipped, and the app
 falls back to a generated tile for them. Replacements must not depict either
 character.
 
+## Checking the set
+
+```bash
+python art/audit.py
+```
+
+Compares the art region of every cover against every other and flags pairs
+scoring 0.79 or above as too alike to tell apart. Covers built from an
+illustration score at most 0.75 against each other, so anything higher is a
+duplicated composition rather than a shared house style.
+
+This exists because "does it look like the same shelf?" is the one requirement
+that cannot be checked per file. A tile can be well drawn, correctly sized and
+on-palette and still be the fourth near-identical orange gradient in a row.
+
 ## Adding or replacing a cover
 
 1. Add a `make_*` function, or an entry to `build_batch2.py` /
