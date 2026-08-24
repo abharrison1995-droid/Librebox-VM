@@ -37,7 +37,7 @@
 
 <button class="catalog-card" class:selected {onclick} type="button">
   <div class="cover-slot">
-    <CoverTile title={game.title} src={game.cover_url} runtime={game.runtime} />
+    <CoverTile id={game.id} title={game.title} src={game.cover_url} runtime={game.runtime} />
     {#if install}
       <span class="install-overlay">
         <span class="install-phase">{PHASE_LABEL[install.phase]}</span>

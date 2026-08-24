@@ -45,6 +45,13 @@ See the schema enforced by `lint.mjs`. Controlled vocabularies:
 `86box` entries are accepted and stored, but the VM runtime is not implemented
 yet, so the app shows them as "Not yet playable".
 
+`cover_url` must point at `covers/<id>.png` on the published site, and the
+matching file must exist in `static/covers/`. The linter checks both directions,
+because a `cover_url` whose art was never committed 404s for every user while
+looking correct in the catalog. Leave it `null` when there is no art; the app
+generates a tile from the title instead. See [`art/README.md`](../art/README.md)
+for how covers are made and the rule they must satisfy.
+
 `runtime_config` is a free-form object whose shape depends on `runtime`:
 
 ```jsonc

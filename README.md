@@ -24,6 +24,9 @@ Wrapped in a Windows XP Luna interface, because that is the era.
   finds the program and launches it alongside everything else.
 - **Browse and filter** — search by title, developer or publisher, and filter
   by platform, runtime, or licence.
+- **Cover art** — original 32-colour pixel tiles, one per entry, bundled with the
+  app so the grid is populated offline and on first run. None derives from
+  published box art; see [`art/README.md`](art/README.md).
 - **Licence transparency** — every entry states what makes it free and links to
   a page corroborating that. See [`catalog/README.md`](catalog/README.md).
 - **Offline-capable** — the catalog is fetched at launch and cached locally, with
@@ -45,10 +48,9 @@ In rough order:
    from the UI, so a game that runs silently or at ludicrous speed can be fixed
    without hand-editing a config.
 4. **Settings** — choosing where games install.
-5. **Cover art** — the catalog supports a `cover_url` per entry; until one is
-   supplied a cover is generated from the title. Box art is copyrighted
-   independently of whether a game is freely redistributable, so only clearly
-   licensed images will be added.
+5. **Remaining cover art** — 38 of 40 entries have art. Two are deliberately
+   without it, and roughly half of the rest are weaker, near-interchangeable
+   compositions that deserve a second pass. See [`art/README.md`](art/README.md).
 6. **VM sandbox (before 1.0)** — 86Box integration for Win9x-era titles, with
    guest driver management. The catalog schema already carries an `86box`
    runtime; such entries display as "Not yet playable" until this lands.
@@ -86,6 +88,7 @@ Other useful commands:
 | `npm run lint:catalog:urls` | Also verify every download URL still resolves |
 | `npm run hash:catalog` | Backfill missing SHA-256 hashes |
 | `npm run build:site` | Build the public catalog page into `_site/` |
+| `python art/rebuild_all_40.py` | Regenerate every cover into `static/covers/` |
 | `cargo test` (in `src-tauri/`) | Rust tests |
 | `cargo test -- --ignored` | Also run the network tests that really install a game |
 
@@ -103,6 +106,11 @@ Librebox lists **only** games that are lawfully free to redistribute: freeware,
 open-source, public-domain, and shareware episodes still distributed by their
 rights holders. It hosts no game files of its own — every download points at the
 publisher's own infrastructure or the Internet Archive.
+
+Cover art is original work, not box art. No tile derives from a published cover,
+screenshot, or sprite, and none depicts a licensed character — a game being free
+to redistribute says nothing about who owns its packaging, and a pixel filter is
+not a licence. See [`art/README.md`](art/README.md).
 
 If you hold rights to something listed here and want it removed, open an issue.
 See [`catalog/README.md`](catalog/README.md#takedown).

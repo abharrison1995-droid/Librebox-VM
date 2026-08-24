@@ -263,6 +263,7 @@
       <aside class="detail-panel xp-panel">
         <div class="detail-cover">
           <CoverTile
+            id={selectedGame.id}
             title={selectedGame.title}
             src={selectedGame.cover_url}
             runtime={selectedGame.runtime}

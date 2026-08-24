@@ -78,7 +78,12 @@ const cards = catalog.games
         data-runtime="${esc(g.runtime)}"
         data-license="${esc(g.license)}"
         data-search="${esc(`${g.title} ${g.developer ?? ""} ${g.publisher ?? ""}`.toLowerCase())}">
-        <div class="tile" style="--h:${hue(g.title)}">${esc(g.title.charAt(0).toUpperCase())}</div>
+        ${
+          g.cover_url
+            // Relative, so the page works on any host and in a local _site preview.
+            ? `<img class="tile art" src="covers/${esc(g.id)}.png" alt="${esc(g.title)} cover" loading="lazy" width="512" height="512">`
+            : `<div class="tile" style="--h:${hue(g.title)}">${esc(g.title.charAt(0).toUpperCase())}</div>`
+        }
         <div class="body">
           <h3>${esc(g.title)}</h3>
           <p class="meta">${esc(meta)}</p>
@@ -140,6 +145,9 @@ const html = `<!doctype html>
   .tile { flex: 0 0 56px; height: 56px; border-radius: 6px; display: grid; place-items: center;
           font-size: 26px; font-weight: 700; color: #fff;
           background: hsl(var(--h) 45% 45%); }
+  /* The art is pixel art; let it stay blocky rather than being smoothed. */
+  .tile.art { width: 56px; background: none; object-fit: cover;
+              image-rendering: pixelated; }
   .body { min-width: 0; }
   h3 { margin: 0 0 2px; font-size: 15px; }
   .meta { margin: 0 0 6px; font-size: 12px; color: var(--muted); }
@@ -245,4 +253,17 @@ const html = `<!doctype html>
 mkdirSync(OUT, { recursive: true });
 copyFileSync(join(HERE, "catalog.json"), join(OUT, "catalog.json"));
 writeFileSync(join(OUT, "index.html"), html);
-console.log(`Built _site/ with ${catalog.games.length} entries`);
+
+// Every cover_url points here, so publishing the catalog without the art would
+// leave each entry pointing at a 404. The app has its own bundled copy, but the
+// website and any other client rely on these.
+const COVERS_SRC = join(ROOT, "static", "covers");
+const COVERS_OUT = join(OUT, "covers");
+mkdirSync(COVERS_OUT, { recursive: true });
+let copied = 0;
+for (const game of catalog.games) {
+  if (!game.cover_url) continue;
+  copyFileSync(join(COVERS_SRC, `${game.id}.png`), join(COVERS_OUT, `${game.id}.png`));
+  copied += 1;
+}
+console.log(`Built _site/ with ${catalog.games.length} entries and ${copied} covers`);
