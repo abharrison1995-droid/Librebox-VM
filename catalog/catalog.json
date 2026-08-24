@@ -48,7 +48,7 @@
       "license_note": "Released as freeware by Revolution Software and distributed by the ScummVM project.",
       "source_url": "https://www.scummvm.org/games/#games-sky",
       "description": "Dystopian cyberpunk point-and-click with Dave Gibbons artwork.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/beneath-a-steel-sky.png",
       "download": {
         "url": "https://downloads.scummvm.org/frs/extras/Beneath%20a%20Steel%20Sky/bass-cd-1.2.zip",
         "format": "zip",
@@ -75,7 +75,7 @@
       "license_note": "Released as freeware by 3D Realms in 2005.",
       "source_url": "https://archive.org/details/msdos_Bio_Menace_1993",
       "description": "Snake Logan cleans mutants out of Metro City with a lot of firepower.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/bio-menace.png",
       "download": {
         "url": "https://archive.org/download/msdos_Bio_Menace_1993/Bio_Menace_1993.zip",
         "format": "zip",
@@ -105,7 +105,7 @@
       "license_note": "Shareware episode distributed by Apogee Software.",
       "source_url": "https://archive.org/details/msdos_Blake_Stone_-_Aliens_of_Gold_1993",
       "description": "A Wolf3D-engine shooter with informants, elevators and keycards.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/blake-stone-shareware.png",
       "download": {
         "url": "https://archive.org/download/Bs-aog-sw1/bstone.zip",
         "format": "zip",
@@ -135,7 +135,7 @@
       "license_note": "Released as freeware by Daisuke 'Pixel' Amaya.",
       "source_url": "https://www.cavestory.org/",
       "description": "The freeware metroidvania that launched a thousand indie careers.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/cave-story.png",
       "download": {
         "url": "https://www.cavestory.org/downloads/cavestoryen.zip",
         "format": "zip",
@@ -190,7 +190,7 @@
       "license_note": "Shareware episode distributed by Apogee Software.",
       "source_url": "https://archive.org/details/msdos_Crystal_Caves_1991",
       "description": "Mine crystals across hazard-filled caverns as Mylo Steamwitz.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/crystal-caves.png",
       "download": {
         "url": "https://archive.org/download/msdos_Crystal_Caves_1991/Crystal_Caves_1991.zip",
         "format": "zip",
@@ -220,7 +220,7 @@
       "license_note": "Free and open-source cooperative platformer built on the Teeworlds engine.",
       "source_url": "https://ddnet.org/",
       "description": "Co-operative 2D platforming with tight physics and thousands of community maps.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/ddnet.png",
       "download": {
         "url": "https://ddnet.org/downloads/DDNet-19.2-win64.zip",
         "format": "zip",
@@ -247,7 +247,7 @@
       "license_note": "Shareware episode distributed by Interplay.",
       "source_url": "https://archive.org/details/msdos_Descent_1995",
       "description": "Six degrees of freedom in claustrophobic mining tunnels.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/descent-shareware.png",
       "download": {
         "url": "https://archive.org/download/msdos_Descent_1995/Descent_1995.zip",
         "format": "zip",
@@ -276,7 +276,7 @@
       "license_note": "Sublicense-free GPL-3.0 engine. Requires original Diablo game data, or the freely available shareware DIABDAT.",
       "source_url": "https://github.com/diasurgical/devilutionX",
       "description": "A modern, cross-platform source port of the Diablo engine.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/devilutionx.png",
       "download": {
         "url": "https://github.com/diasurgical/DevilutionX/releases/download/1.5.5/devilutionx-windows-x86_64.zip",
         "format": "zip",
@@ -303,7 +303,7 @@
       "license_note": "Episode 1, 'Knee-Deep in the Dead', is freely redistributable shareware released by id Software.",
       "source_url": "https://archive.org/details/DoomsharewareEpisode",
       "description": "The shareware episode of the game that defined the first-person shooter.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/doom-shareware.png",
       "download": {
         "url": "https://archive.org/download/DoomsharewareEpisode/DoomV1.9sw1995idSoftwareInc.action.zip",
         "format": "zip",
@@ -333,7 +333,7 @@
       "license_note": "Released as freeware by Alcachofa Soft and distributed by the ScummVM project.",
       "source_url": "https://www.scummvm.org/games/#games-drascula",
       "description": "A gleefully silly Spanish horror-comedy adventure.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/drascula.png",
       "download": {
         "url": "https://downloads.scummvm.org/frs/extras/Drascula_%20The%20Vampire%20Strikes%20Back/drascula-1.0.zip",
         "format": "zip",
@@ -391,7 +391,7 @@
       "license_note": "GPL-3.0 open-source space trading and combat game.",
       "source_url": "https://endless-sky.github.io/",
       "description": "Trade, fight and explore a vast galaxy in this Escape Velocity successor.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/endless-sky.png",
       "download": {
         "url": "https://github.com/endless-sky/endless-sky/releases/download/v0.11.2/EndlessSky-win64-v0.11.2.zip",
         "format": "zip",
@@ -417,7 +417,7 @@
       "license_note": "Shareware table distributed by Epic MegaGames.",
       "source_url": "https://archive.org/details/msdos_Epic_Pinball_1993",
       "description": "Smooth-scrolling pinball with one of the great tracker soundtracks.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/epic-pinball-shareware.png",
       "download": {
         "url": "https://archive.org/download/msdos_Epic_Pinball_1993/Epic_Pinball_1993.zip",
         "format": "zip",
@@ -447,7 +447,7 @@
       "license_note": "Released as freeware by the authors and distributed by the ScummVM project.",
       "source_url": "https://www.scummvm.org/games/#games-queen",
       "description": "Pulp jungle adventure with a wisecracking pilot and lost Amazon tribes.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/flight-of-the-amazon-queen.png",
       "download": {
         "url": "https://downloads.scummvm.org/frs/extras/Flight%20of%20the%20Amazon%20Queen/FOTAQ_Talkie-1.1.zip",
         "format": "zip",
@@ -474,7 +474,7 @@
       "license_note": "BSD-licensed free content IWADs compatible with the Doom engine.",
       "source_url": "https://freedoom.github.io/",
       "description": "A complete, freely licensed replacement for the original Doom game data.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/freedoom.png",
       "download": {
         "url": "https://github.com/freedoom/freedoom/releases/download/v0.13.0/freedoom-0.13.0.zip",
         "format": "zip",
@@ -499,7 +499,7 @@
       "license_note": "Shareware episode distributed by id Software.",
       "source_url": "https://archive.org/details/msdos_Heretic_1994",
       "description": "Dark fantasy on the Doom engine, with inventory and look-up-and-down.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/heretic-shareware.png",
       "download": {
         "url": "https://archive.org/download/msdos_Heretic_1994/Heretic_1994.zip",
         "format": "zip",
@@ -528,7 +528,7 @@
       "license_note": "Shareware episode distributed by Apogee Software.",
       "source_url": "https://archive.org/details/msdos_Hocus_Pocus_1994",
       "description": "A wizard's apprentice blasts through colourful side-scrolling levels.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/hocus-pocus.png",
       "download": {
         "url": "https://archive.org/download/msdos_Hocus_Pocus_1994/Hocus_Pocus_1994.zip",
         "format": "zip",
@@ -557,7 +557,7 @@
       "license_note": "Shareware episode distributed by Epic MegaGames.",
       "source_url": "https://archive.org/details/msdos_Jazz_Jackrabbit_1994",
       "description": "A blisteringly fast mascot platformer, the PC's answer to Sonic.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/jazz-jackrabbit-shareware.png",
       "download": {
         "url": "https://archive.org/download/msdos_Jazz_Jackrabbit_1994/Jazz_Jackrabbit_1994.zip",
         "format": "zip",
@@ -586,7 +586,7 @@
       "license_note": "Source code released under GPL-2.0; the game data was made freely available by the rights holders.",
       "source_url": "https://archive.org/details/msdos_Keen_Dreams_1991",
       "description": "The oddball Commander Keen entry where Billy fights vegetables.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/keen-dreams.png",
       "download": {
         "url": "https://archive.org/download/CommanderKeenKeenDreams/CommanderKeenInKeenDreamsV1.13Egasw1992softdiskPublishingaction.ZIP",
         "format": "zip",
@@ -616,7 +616,7 @@
       "license_note": "Released as freeware by Revolution Software and distributed by the ScummVM project.",
       "source_url": "https://www.scummvm.org/games/#games-lure",
       "description": "Revolution's first adventure, with an early NPC 'virtual theatre' system.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/lure-of-the-temptress.png",
       "download": {
         "url": "https://downloads.scummvm.org/frs/extras/Lure%20of%20the%20Temptress/lure-1.1.zip",
         "format": "zip",
@@ -643,7 +643,7 @@
       "license_note": "Released as freeware by 3D Realms.",
       "source_url": "https://archive.org/details/msdos_Major_Stryker_1993",
       "description": "A vertically scrolling shooter with smooth EGA parallax starfields.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/major-stryker.png",
       "download": {
         "url": "https://archive.org/download/msdos_Major_Stryker_1993/Major_Stryker_1993.zip",
         "format": "zip",
@@ -672,7 +672,7 @@
       "license_note": "Shareware episode distributed by Apogee Software.",
       "source_url": "https://archive.org/details/monster-bash1-sw",
       "description": "Johnny Dash rescues kidnapped pets from a cast of horror-movie monsters.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/monster-bash.png",
       "download": {
         "url": "https://archive.org/download/monster-bash1-sw/bash.zip",
         "format": "zip",
@@ -701,7 +701,7 @@
       "license_note": "Released as freeware by Epic Games in 1999.",
       "source_url": "https://archive.org/details/msdos_One_Must_Fall_2097_1994",
       "description": "Mech-piloting fighting game with a deep pilot progression system.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/one-must-fall-2097.png",
       "download": {
         "url": "https://archive.org/download/msdos_One_Must_Fall_2097_1994/One_Must_Fall_2097_1994.zip",
         "format": "zip",
@@ -731,7 +731,7 @@
       "license_note": "GPL-3.0 engine. Freely downloads the publisher-released freeware Command & Conquer and Red Alert data on first run.",
       "source_url": "https://www.openra.net/",
       "description": "Modernised Command & Conquer and Red Alert with contemporary RTS controls.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/openra.png",
       "download": {
         "url": "https://github.com/OpenRA/OpenRA/releases/download/release-20250330/OpenRA-release-20250330-x64-winportable.zip",
         "format": "zip",
@@ -758,7 +758,7 @@
       "license_note": "GPL-2.0 open-source remake of Transport Tycoon Deluxe.",
       "source_url": "https://www.openttd.org/",
       "description": "Build and run a transport empire; the definitive Transport Tycoon successor.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/openttd.png",
       "download": {
         "url": "https://cdn.openttd.org/openttd-releases/14.1/openttd-14.1-windows-win64.zip",
         "format": "zip",
@@ -785,7 +785,7 @@
       "license_note": "Shareware episode distributed by Apogee Software.",
       "source_url": "https://archive.org/details/msdos_Raptor_Call_of_the_Shadows_1994",
       "description": "A mercenary pilot upgrades an increasingly absurd arsenal between sorties.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/raptor-call-of-the-shadows.png",
       "download": {
         "url": "https://archive.org/download/Raptor-sw1/raptor.zip",
         "format": "zip",
@@ -815,7 +815,7 @@
       "license_note": "The Hunt Begins shareware episode, distributed by Apogee Software.",
       "source_url": "https://archive.org/details/msdos_Rise_of_the_Triad_-_The_HUNT_Begins_1995",
       "description": "Absurdly over-the-top shooter with jump pads, missiles and dog mode.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/rise-of-the-triad-shareware.png",
       "download": {
         "url": "https://archive.org/download/msdos_Rise_of_the_Triad_-_The_Hunt_Begins_Deluxe_Edition_1995/Rise_of_the_Triad_-_The_Hunt_Begins_Deluxe_Edition_1995.zip",
         "format": "zip",
@@ -845,7 +845,7 @@
       "license_note": "Shareware episode distributed by Apogee Software.",
       "source_url": "https://archive.org/details/msdos_Secret_Agent_1992",
       "description": "Agent 006 1/2 infiltrates enemy bases in this Keen-engine spy caper.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/secret-agent.png",
       "download": {
         "url": "https://archive.org/download/msdos_Secret_Agent_1992/Secret_Agent_1992.zip",
         "format": "zip",
@@ -875,7 +875,7 @@
       "license_note": "Released as freeware by Laboratorium Komputerowe Avalon and distributed by the ScummVM project.",
       "source_url": "https://www.scummvm.org/games/#games-soltys",
       "description": "A Polish cult adventure about a caretaker caught up in the supernatural.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/soltys.png",
       "download": {
         "url": "https://downloads.scummvm.org/frs/extras/Soltys/soltys-en-v1.0.zip",
         "format": "zip",
@@ -901,7 +901,7 @@
       "license_note": "GPL-3.0 open-source platformer.",
       "source_url": "https://www.supertux.org/",
       "description": "A classic side-scrolling platformer starring the Linux penguin.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/supertux.png",
       "download": {
         "url": "https://github.com/SuperTux/supertux/releases/download/v0.7.0/SuperTux-v0.7.0-win64-portable.zip",
         "format": "zip",
@@ -927,7 +927,7 @@
       "license_note": "GPL-3.0 open-source kart racer.",
       "source_url": "https://supertuxkart.net/",
       "description": "A polished free kart racer with weapons, drifting and split-screen.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/supertuxkart.png",
       "download": {
         "url": "https://github.com/supertuxkart/stk-code/releases/download/1.5/SuperTuxKart-1.5-win.zip",
         "format": "zip",
@@ -954,7 +954,7 @@
       "license_note": "Shareware episode distributed by 3D Realms.",
       "source_url": "https://archive.org/details/msdos_Terminal_Velocity_1995",
       "description": "Blisteringly fast texture-mapped flight combat across alien worlds.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/terminal-velocity-shareware.png",
       "download": {
         "url": "https://archive.org/download/msdos_Terminal_Velocity_1995/Terminal_Velocity_1995.zip",
         "format": "zip",
@@ -984,7 +984,7 @@
       "license_note": "GPL-2.0 open-source turn-based strategy game.",
       "source_url": "https://www.wesnoth.org/",
       "description": "Deep hex-based fantasy strategy with a vast library of campaigns.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/the-battle-for-wesnoth.png",
       "download": {
         "url": "https://sourceforge.net/projects/wesnoth/files/wesnoth-1.18/wesnoth-1.18.2/wesnoth-1.18.2-win64.exe/download",
         "format": "exe",
@@ -1011,7 +1011,7 @@
       "license_note": "Star Control II source and content released by Toys for Bob in 2002; engine is GPL-2.0, content CC-BY-NC-SA.",
       "source_url": "https://sourceforge.net/projects/sc2/",
       "description": "The legendary Star Control II, freely released and lovingly maintained.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/the-ur-quan-masters.png",
       "download": {
         "url": "https://downloads.sourceforge.net/project/sc2/UQM/0.8/uqm-0.8-win32.exe",
         "format": "exe",
@@ -1038,7 +1038,7 @@
       "license_note": "Released as freeware by the copyright holders in 2004.",
       "source_url": "https://archive.org/details/msdos_Tyrian_2000_1999",
       "description": "A gorgeous vertical shooter with a sprawling ship upgrade economy.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/tyrian-2000.png",
       "download": {
         "url": "https://archive.org/download/msdos_Tyrian_2000_1999/Tyrian_2000_1999.zip",
         "format": "zip",
@@ -1068,7 +1068,7 @@
       "license_note": "Original source and data released by Eidos in 2004; now maintained under GPL-2.0.",
       "source_url": "https://wz2100.net/",
       "description": "Post-apocalyptic RTS with a genuinely deep unit design system.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/warzone-2100.png",
       "download": {
         "url": "https://github.com/Warzone2100/warzone2100/releases/download/4.7.0/warzone2100_win_x64_archive.zip",
         "format": "zip",
@@ -1095,7 +1095,7 @@
       "license_note": "GPL-2.0 open-source real-time strategy game inspired by Settlers II.",
       "source_url": "https://www.widelands.org/",
       "description": "Economy-focused RTS about supply chains, not unit micromanagement.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/widelands.png",
       "download": {
         "url": "https://github.com/widelands/widelands/releases/download/v1.3.1/Widelands-1.3.1-x64.exe",
         "format": "exe",
@@ -1122,7 +1122,7 @@
       "license_note": "Episode 1 was released as freely redistributable shareware by Apogee and id Software.",
       "source_url": "https://archive.org/details/Wolfenstein3d",
       "description": "The grandfather of the first-person shooter, escaping Castle Wolfenstein.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/wolfenstein-3d-shareware.png",
       "download": {
         "url": "https://archive.org/download/Wolfenstein3d/Wolfenstein3dV14sw.ZIP",
         "format": "zip",
@@ -1152,7 +1152,7 @@
       "license_note": "GPL-2.0 open-source arena shooter.",
       "source_url": "https://xonotic.org/",
       "description": "Fast, movement-heavy arena FPS in the Quake tradition.",
-      "cover_url": null,
+      "cover_url": "https://abharrison1995-droid.github.io/Librebox-VM/covers/xonotic.png",
       "download": {
         "url": "https://dl.xonotic.org/xonotic-0.8.6.zip",
         "format": "zip",

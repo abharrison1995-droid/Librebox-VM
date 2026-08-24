@@ -3,6 +3,8 @@
 
   interface Props {
     title: string;
+    /** Catalog id, used to find the cover bundled with the app. */
+    id?: string | null;
     src?: string | null;
     /** Runtime, used to tint the generated cover. */
     runtime?: string | null;
@@ -10,12 +12,24 @@
     letterSize?: number;
   }
 
-  let { title, src, runtime, letterSize = 40 }: Props = $props();
+  let { title, id, src, runtime, letterSize = 40 }: Props = $props();
 
-  // Covers are remote URLs in the catalog and may 404; fall back to the tile.
-  let failed = $state(false);
-  let showImage = $derived(!!src && !failed);
+  // Bundled art first, so covers work offline and on first run before any sync;
+  // then the catalog's URL, which can carry art newer than the installed app;
+  // then a generated tile. Each step is only reached if the previous 404s.
+  let sources = $derived(
+    [id ? `/covers/${id}.png` : null, src].filter((s): s is string => !!s),
+  );
+  let attempt = $state(0);
+  let current = $derived(sources[attempt] ?? null);
   let art = $derived(coverArt(title, runtime));
+
+  // Selecting a different game reuses this component, so the cursor has to go
+  // back to the start or the new game inherits the old one's failures.
+  $effect(() => {
+    sources;
+    attempt = 0;
+  });
 
   // Two initials need to be smaller than one to fit the same box.
   let fontSize = $derived(art.initials.length > 1 ? letterSize * 0.72 : letterSize);
@@ -24,8 +38,8 @@
 </script>
 
 <div class="cover">
-  {#if showImage}
-    <img src={src} alt="{title} cover art" onerror={() => (failed = true)} />
+  {#if current}
+    <img src={current} alt="{title} cover art" onerror={() => (attempt += 1)} />
   {:else}
     <!-- Generated rather than scraped: box art is copyrighted independently of
          whether a game is freely redistributable. -->
@@ -69,6 +83,11 @@
     height: 100%;
     display: block;
     object-fit: cover;
+  }
+  /* Covers are 128px art upscaled 4x. Bilinear smoothing on the way back down
+     turns the deliberate pixels to mush, which is the whole look. */
+  .cover img {
+    image-rendering: pixelated;
   }
   .initials {
     position: absolute;

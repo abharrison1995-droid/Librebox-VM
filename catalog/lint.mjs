@@ -9,12 +9,13 @@
  * Exits non-zero if any entry fails.
  */
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CATALOG_PATH = join(HERE, "catalog.json");
+const COVERS_DIR = join(HERE, "..", "static", "covers");
 
 const SCHEMA_VERSION = 1;
 
@@ -152,6 +153,20 @@ for (const [i, game] of catalog.games.entries()) {
   }
   if (game.cover_url && !isHttpUrl(game.cover_url)) {
     err(id, `cover_url is not a valid http(s) URL: ${game.cover_url}`);
+  }
+  // The app loads bundled art by id and only falls back to cover_url, so the
+  // two must agree. A cover_url pointing at art that was never committed would
+  // 404 for every user while looking fine here.
+  const coverFile = join(COVERS_DIR, `${id}.png`);
+  const hasArt = existsSync(coverFile);
+  if (game.cover_url && !game.cover_url.endsWith(`/covers/${id}.png`)) {
+    err(id, `cover_url does not point at covers/${id}.png: ${game.cover_url}`);
+  }
+  if (game.cover_url && !hasArt) {
+    err(id, `cover_url is set but static/covers/${id}.png is missing`);
+  }
+  if (!game.cover_url && hasArt) {
+    err(id, `static/covers/${id}.png exists but cover_url is null`);
   }
 
   const dl = game.download;

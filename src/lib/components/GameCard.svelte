@@ -7,6 +7,8 @@
     year?: number | null;
     platform: string;
     runtime?: string | null;
+    /** Catalog id, so an installed game shows the same art as the catalog. */
+    catalogId?: string | null;
     coverPath?: string | null;
     selected?: boolean;
     ondblclick?: () => void;
@@ -14,7 +16,7 @@
   }
 
   let {
-    title, year, platform, runtime, coverPath,
+    title, year, platform, runtime, catalogId, coverPath,
     selected = false, ondblclick, onclick,
   }: Props = $props();
 </script>
@@ -27,7 +29,7 @@
   type="button"
 >
   <div class="cover-slot">
-    <CoverTile {title} {runtime} src={coverPath} />
+    <CoverTile id={catalogId} {title} {runtime} src={coverPath} />
   </div>
   <div class="meta">
     <span class="title">{title}</span>

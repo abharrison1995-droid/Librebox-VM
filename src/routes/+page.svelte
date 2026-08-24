@@ -120,6 +120,7 @@
               year={game.year}
               platform={game.platform}
               runtime={game.runtime}
+              catalogId={game.catalog_id}
               coverPath={game.cover_path}
               selected={selectedId === game.id}
               onclick={() => selectedId = game.id}
@@ -156,6 +157,7 @@
       <aside class="detail-panel">
         <div class="detail-cover">
           <CoverTile
+            id={selectedGame.catalog_id}
             title={selectedGame.title}
             src={selectedGame.cover_path}
             runtime={selectedGame.runtime}
