@@ -57,10 +57,22 @@ character.
 python art/audit.py
 ```
 
-Compares the art region of every cover against every other and flags pairs
-scoring 0.79 or above as too alike to tell apart. Covers built from an
-illustration score at most 0.75 against each other, so anything higher is a
-duplicated composition rather than a shared house style.
+Runs two checks over the art region of every cover, above the title band.
+
+**Too alike** - compares each cover against every other and flags pairs scoring
+0.79 or above. Covers built from an illustration score at most 0.75 against each
+other, so anything higher is a duplicated composition rather than a shared house
+style.
+
+**Flat** - flags any cover using fewer than 24 of its 32 colours. Every cover
+built from an illustration uses 24 to 32; the ones that read as an empty
+gradient use 9 to 19. Colour count is a usable stand-in for having real
+materials, lighting and depth rather than a backdrop with a few shapes on it,
+and unlike composition it can be measured.
+
+Eight covers currently pass both. Four more are kept despite being flat, because
+they are legible and unmistakably about their game - a train on a viaduct, a
+pinball table, a plane over jungle.
 
 This exists because "does it look like the same shelf?" is the one requirement
 that cannot be checked per file. A tile can be well drawn, correctly sized and
