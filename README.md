@@ -89,7 +89,7 @@ Other useful commands:
 | `npm run hash:catalog` | Backfill missing SHA-256 hashes |
 | `npm run build:site` | Build the public catalog page into `_site/` |
 | `python art/rebuild_all_40.py` | Regenerate every cover into `static/covers/` |
-| `python art/audit.py` | Flag cover art too alike to tell apart |
+| `python art/audit.py` | Flag cover art too alike, or too flat, to work |
 | `cargo test` (in `src-tauri/`) | Rust tests |
 | `cargo test -- --ignored` | Also run the network tests that really install a game |
 

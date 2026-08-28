@@ -32,10 +32,24 @@ TWIN = 0.79
 
 TITLE_BAND_TOP = 76  # of 128; below this is title, not art
 
+# Every cover built from an illustration uses 24 or more of its 32 colours in
+# the art region; the ones that read as an empty gradient use 9 to 19. Colour
+# count stands in for having real materials, lighting and depth rather than a
+# backdrop with a few shapes on it, and unlike composition it is measurable.
+FLAT = 24
 
-def features(path):
+
+def art_region(path):
     im = Image.open(path).convert("RGB").resize((128, 128), Image.NEAREST)
-    art = im.crop((0, 0, 128, TITLE_BAND_TOP))
+    return im.crop((0, 0, 128, TITLE_BAND_TOP))
+
+
+def colours(art):
+    a = np.asarray(art, dtype=np.uint8).reshape(-1, 3)
+    return int(len(np.unique(a, axis=0)))
+
+
+def features(art):
     v = np.asarray(art.resize((16, 10), Image.BOX), dtype=np.float32) / 255.0
     v = (v - v.mean()) / (v.std() + 1e-6)
     v = v.ravel()
@@ -46,12 +60,14 @@ def main():
     catalog = json.load(open(CATALOG, encoding="utf-8"))
     games = {g["id"]: g for g in catalog["games"]}
 
-    ids, mats = [], []
+    ids, mats, palette = [], [], {}
     for gid in sorted(games):
         path = os.path.join(COVERS, gid + ".png")
         if os.path.exists(path):
+            art = art_region(path)
             ids.append(gid)
-            mats.append(features(path))
+            mats.append(features(art))
+            palette[gid] = colours(art)
 
     missing = [g for g in sorted(games) if g not in ids]
     sim = np.stack(mats) @ np.stack(mats).T
@@ -66,21 +82,26 @@ def main():
             "nearest": ids[j],
             "similarity": round(float(sim[i][j]), 3),
             "twin": bool(sim[i][j] >= TWIN),
+            "colours": palette[gid],
+            "flat": bool(palette[gid] < FLAT),
         })
     report.sort(key=lambda r: -r["similarity"])
 
     if "--json" in sys.argv:
-        json.dump({"threshold": TWIN, "missing": missing, "covers": report},
-                  sys.stdout, indent=2)
+        json.dump({"twin_threshold": TWIN, "flat_threshold": FLAT,
+                   "missing": missing, "covers": report}, sys.stdout, indent=2)
         return
 
     twins = [r for r in report if r["twin"]]
+    flats = [r for r in report if r["flat"]]
     print(f"{len(ids)} covers, {len(missing)} missing, "
-          f"{len(twins)} too alike (>= {TWIN})\n")
-    print(f"{'sim':>5}  {'cover':<32} nearest")
+          f"{len(twins)} too alike (>= {TWIN}), "
+          f"{len(flats)} flat (< {FLAT} colours)\n")
+    print(f"{'sim':>5} {'col':>4}  {'cover':<32} nearest")
     for r in report:
-        mark = "!" if r["twin"] else " "
-        print(f"{r['similarity']:5.2f}{mark} {r['id']:<32} {r['nearest']}")
+        flags = ("!" if r["twin"] else " ") + ("f" if r["flat"] else " ")
+        print(f"{r['similarity']:5.2f} {r['colours']:4d}{flags} "
+              f"{r['id']:<32} {r['nearest']}")
     if missing:
         print("\nno art:", ", ".join(missing))
 
