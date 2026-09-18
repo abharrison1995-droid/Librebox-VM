@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Type check and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Type check
+        run: npm run check
+
+      # The Tauri build consumes ../build, so a frontend that type-checks but
+      # does not build would still break packaging.
+      - name: Build
+        run: npm run build
+
+  rust:
+    name: Rust tests
+    # Librebox targets Windows: the catalog pins dosbox.exe and scummvm.exe,
+    # and testing on the platform we ship avoids pulling a GTK/WebKit
+    # toolchain in just to compile Tauri.
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      # tauri-build reads ../build during the build script, and nothing in the
+      # test suite needs the real frontend.
+      - name: Stub the frontend dist
+        shell: bash
+        run: mkdir -p build && echo '<!doctype html><title>test</title>' > build/index.html
+
+      # The --ignored tests really download and install games from the live
+      # catalog, so they stay out of per-PR CI.
+      - name: Test
+        working-directory: src-tauri
+        run: cargo test
